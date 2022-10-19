@@ -10,4 +10,12 @@ public class Point {
     private int y;
     private List<Container> containerList;
 
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
