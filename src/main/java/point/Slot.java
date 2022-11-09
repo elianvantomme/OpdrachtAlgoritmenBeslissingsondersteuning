@@ -4,7 +4,7 @@ import container.Container;
 
 import java.util.List;
 
-public class Point {
+public class Slot {
 
     private int x;
     private int y;

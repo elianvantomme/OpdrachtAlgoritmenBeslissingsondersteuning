@@ -1,12 +1,12 @@
 package park;
 
 import crane.Crane;
-import point.Point;
+import point.Slot;
 
 import java.util.List;
 
-public class Park {
+public class Yard {
 
-    private Point[][] grid;
+    private Slot[][] grid;
     private List<Crane> craneList;
 }

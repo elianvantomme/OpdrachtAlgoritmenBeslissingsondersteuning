@@ -1,18 +1,18 @@
 package crane;
 
 import container.Container;
-import point.Point;
+import point.Slot;
 
 public class Movement {
-    private Point p1;
-    private Point p2;
+    private Slot p1;
+    private Slot p2;
     private double xSpeed;
     private double ySpeed;
     private double startTime;
     private double travelTime;
     private double endTime;
 
-    public Movement(Point p1, Point p2, double startTime){
+    public Movement(Slot p1, Slot p2, double startTime){
         this.p1 = p1;
         this.p2 = p2;
         this.startTime = startTime;
