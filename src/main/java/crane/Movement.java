@@ -24,7 +24,7 @@ public class Movement {
         double deltaY = Math.abs(p1.getY() - p2.getY());
         xSpeed = deltaX;
         ySpeed = deltaY;
-        travelTime = (Math.sqrt(Math.pow(deltaY*Container.getWidth(),2)+ Math.pow(deltaX*Container.getLength(),2)))/(Math.sqrt(Math.pow(xSpeed,2))+Math.pow(ySpeed,2));
+//        travelTime = (Math.sqrt(Math.pow(deltaY*Container.getWidth(),2)+ Math.pow(deltaX*Container.getLength(),2)))/(Math.sqrt(Math.pow(xSpeed,2))+Math.pow(ySpeed,2));
         endTime = startTime + travelTime;
     }
 }

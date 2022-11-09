@@ -1,14 +1,27 @@
 package container;
 
 public class Container {
-    private static double length = 4;
-    private static double width = 2;
+    private int id;
+    private int length;
 
-    public static double getLength() {
+    public Container(int id, int length) {
+        this.id = id;
+        this.length = length;
+    }
+
+    public int getLength() {
         return length;
     }
 
-    public static double getWidth() {
-        return width;
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Container{" +
+                "id=" + id +
+                ", length=" + length +
+                '}';
     }
 }
