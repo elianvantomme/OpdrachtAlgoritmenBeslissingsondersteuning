@@ -22,9 +22,6 @@ public class Movement {
     private void calculateTravelTime(){
         double deltaX = Math.abs(p1.getX()-p2.getX());
         double deltaY = Math.abs(p1.getY() - p2.getY());
-        xSpeed = deltaX;
-        ySpeed = deltaY;
-//        travelTime = (Math.sqrt(Math.pow(deltaY*Container.getWidth(),2)+ Math.pow(deltaX*Container.getLength(),2)))/(Math.sqrt(Math.pow(xSpeed,2))+Math.pow(ySpeed,2));
-        endTime = startTime + travelTime;
+        endTime = startTime + Math.max(deltaX, deltaY);
     }
 }
