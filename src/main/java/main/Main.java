@@ -15,5 +15,7 @@ public class Main {
         InputReader inputReader = new InputReader(file);
         Yard yard = inputReader.getYard();
         Map<Integer, Slot> initialGrid = yard.getGrid();
+
+        System.out.println(initialGrid.toString());
     }
 }

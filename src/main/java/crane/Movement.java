@@ -22,6 +22,7 @@ public class Movement {
     private void calculateTravelTime(){
         double deltaX = Math.abs(p1.getX()-p2.getX());
         double deltaY = Math.abs(p1.getY() - p2.getY());
-        endTime = startTime + Math.max(deltaX, deltaY);
+        travelTime = Math.max(deltaX, deltaY);
+        endTime = startTime + travelTime;
     }
 }
