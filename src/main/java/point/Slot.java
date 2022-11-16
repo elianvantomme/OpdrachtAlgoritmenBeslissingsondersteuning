@@ -10,7 +10,7 @@ public class Slot {
     private int id;
     private int x;
     private int y;
-    private int maxHeight;
+    private static int maxHeight;
     private Stack<Container> containerList;
 
     public Slot(int id, int x, int y) {
