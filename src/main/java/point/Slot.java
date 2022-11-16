@@ -36,6 +36,10 @@ public class Slot {
         containerList.add(container);
     }
 
+    public Stack<Container> getContainerList() {
+        return containerList;
+    }
+
     @Override
     public String toString() {
         return "Slot{" +
