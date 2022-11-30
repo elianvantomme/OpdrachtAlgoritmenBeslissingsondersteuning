@@ -80,7 +80,9 @@ public class InputReader {
             JSONArray slot_id = (JSONArray) j.get("slot_id");
             for (int i = 0; i < slot_id.size(); i++) {
                 int slotId = (int) (long) slot_id.get(i);
-                initialGrid.get(slotId).addContainer(containerMap.get(containerId));
+                Container container = containerMap.get(containerId);
+                container.addSlotId(slotId);
+                initialGrid.get(slotId).addContainer(container);
             }
         }
 

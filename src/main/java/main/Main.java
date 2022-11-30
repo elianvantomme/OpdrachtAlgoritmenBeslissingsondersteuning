@@ -29,7 +29,7 @@ public class Main {
         InputReader inputReader = new InputReader(file);
         Yard yard = inputReader.getYard();
         Map<Integer, Slot> initialGrid = yard.getGrid();
-
+        System.out.println(initialGrid.toString());
         List<Crane> cranes = new ArrayList<>();
         Crane crane1 = new Crane(0,0,false);
         Crane crane2 = new Crane(0,3,false);
