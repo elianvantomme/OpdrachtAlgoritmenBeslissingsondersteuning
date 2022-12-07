@@ -45,7 +45,7 @@ public class Container {
         return "Container{" +
                 "id=" + id +
                 ", length=" + length +
-                ", slotIds=" + slotIds +
+                ", slotId=" + slotId +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package main;
 import container.Container;
 import crane.Crane;
 import input.InputReader;
+import input.Instance;
 import org.json.simple.parser.ParseException;
 import park.TargetYard;
 import park.Yard;
@@ -16,14 +17,7 @@ import java.util.Map;
 
 public class Main {
     public static void moveContainer(Container container, Slot destinationSlot, Yard yard, List<Crane> cranes){
-        Crane usableCrane = null;
-        if (!destinationSlot.getContainerList().contains(container)){
-            for (Crane crane: cranes) {
-                if(!crane.isHoldingContainer() && usableCrane == null){
-                    usableCrane = crane;
-                }
-            }
-        }
+
     }
 
     public static boolean isContainerCorrect(Instance instance, Container container, Slot slot){
