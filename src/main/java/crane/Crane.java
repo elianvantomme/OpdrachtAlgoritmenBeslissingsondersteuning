@@ -2,17 +2,30 @@ package crane;
 
 public class Crane {
 
-    private int x;
-    private int y;
+    private int id;
+    private double x;
+    private double y;
+    private int xMin;
+    private int xMax;
+    private int yMin;
+    private int yMax;
+    private int xSpeed;
+    private int ySpeed;
     private boolean holdingContainer;
 
-    public Crane(int x, int y, boolean holdingContainer){
+    public Crane(int id, double x, double y, int xMin, int xMax, int yMin, int yMax, int xSpeed, int ySpeed) {
+        this.id = id;
         this.x = x;
         this.y = y;
-        this.holdingContainer = holdingContainer;
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -30,5 +43,21 @@ public class Crane {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "Crane{" +
+                "id=" + id +
+                ", x=" + x +
+                ", y=" + y +
+                ", xMin=" + xMin +
+                ", xMax=" + xMax +
+                ", yMin=" + yMin +
+                ", yMax=" + yMax +
+                ", xSpeed=" + xSpeed +
+                ", ySpeed=" + ySpeed +
+                ", holdingContainer=" + holdingContainer +
+                '}';
     }
 }

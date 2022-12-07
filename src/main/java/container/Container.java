@@ -7,25 +7,34 @@ import java.util.List;
 public class Container {
     private int id;
     private int length;
-    private List<Integer> slotIds;
+//    private List<Integer> slotIds;
+    private int slotId;
 
     public Container(int id, int length) {
         this.id = id;
         this.length = length;
-        slotIds = new ArrayList<>();
+//        slotIds = new ArrayList<>();
     }
 
     public int getLength() {
         return length;
     }
 
-    public void addSlotId(int slotId) {
-        slotIds.add(slotId);
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
     }
 
-    public List<Integer> getSlotIds() {
-        return slotIds;
+    public int getSlotId() {
+        return slotId;
     }
+
+    //    public void addSlotId(int slotId) {
+//        slotIds.add(slotId);
+//    }
+//
+//    public List<Integer> getSlotIds() {
+//        return slotIds;
+//    }
 
     public int getId() {
         return id;

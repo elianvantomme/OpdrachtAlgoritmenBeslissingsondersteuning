@@ -4,6 +4,7 @@ import container.Container;
 import crane.Crane;
 import input.InputReader;
 import org.json.simple.parser.ParseException;
+import park.TargetYard;
 import park.Yard;
 import point.Slot;
 
@@ -24,16 +25,36 @@ public class Main {
             }
         }
     }
-    public static void main(String[] args) throws IOException, ParseException {
-        File file = new File("src/main/instances/terminal_4_3.json");
-        InputReader inputReader = new InputReader(file);
-        Yard yard = inputReader.getYard();
-        Map<Integer, Slot> initialGrid = yard.getGrid();
+
+    public static boolean isContainerCorrect(Instance instance, Container container, Slot slot){
+        if(container.getSlotId() == )
+    }
+
+    public static void makeDesiredYard(Instance instance) {
+        Yard initialYard = instance.getInitialYard();
+        TargetYard targetYard = instance.getDesiredYard();
+        // key: slotId, value: slot
+        Map<Integer, Slot> initialGrid = initialYard.getGrid();
+        // key: containerId, value: slotId
+        Map<Integer, Integer> desiredGrid = targetYard.getAssignments();
+        Map<Integer, Container> containerMap = initialYard.getContainerMap();
+        List<Container> correctContainersList = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : desiredGrid.entrySet()) {
+            Slot slot = initialGrid
+        }
+
         System.out.println(initialGrid.toString());
-        List<Crane> cranes = new ArrayList<>();
-        Crane crane1 = new Crane(0,0,false);
-        Crane crane2 = new Crane(0,3,false);
-        cranes.add(crane1);
-        cranes.add(crane2);
+    }
+
+    public static void main(String[] args) throws IOException, ParseException {
+        File initialYardFile = new File("src/main/instances/terminal22_1_100_1_10.json");
+        File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
+        InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
+        Instance instance = inputReader.getInstance();
+
+
+
+
+
     }
 }

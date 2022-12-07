@@ -1,5 +1,6 @@
 package park;
 
+import container.Container;
 import crane.Crane;
 import point.Slot;
 
@@ -11,14 +12,25 @@ import java.util.Map;
 public class Yard {
 
     private Map<Integer, Slot> grid;
-    private List<Crane> craneList;
+    private Map<Integer, Crane> craneMap;
+    private Map<Integer, Container> containerMap;
 
-    public Yard(Map<Integer, Slot> grid) {
+    public Yard(Map<Integer, Slot> grid, Map<Integer,Crane> craneMap, Map<Integer, Container> containerMap) {
         this.grid = grid;
-        craneList = new ArrayList<>();
+        this.craneMap = craneMap;
+        this.containerMap = containerMap;
+        System.out.println("craneMap = " + craneMap);
     }
 
     public Map<Integer, Slot> getGrid() {
         return grid;
+    }
+
+    public Map<Integer, Crane> getCraneMap() {
+        return craneMap;
+    }
+
+    public Map<Integer, Container> getContainerMap() {
+        return containerMap;
     }
 }
