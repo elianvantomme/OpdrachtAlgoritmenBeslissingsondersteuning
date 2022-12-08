@@ -1,14 +1,12 @@
 package container;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Container {
     private int id;
     private int length;
 //    private List<Integer> slotIds;
-    private int slotId;
+    private List<Integer> slotIds;
 
     public Container(int id, int length) {
         this.id = id;
@@ -20,12 +18,12 @@ public class Container {
         return length;
     }
 
-    public void setSlotId(int slotId) {
-        this.slotId = slotId;
+    public void setSlotId(List<Integer> slotIds) {
+        this.slotIds = slotIds;
     }
 
-    public int getSlotId() {
-        return slotId;
+    public List<Integer> getSlotIds() {
+        return slotIds;
     }
 
     //    public void addSlotId(int slotId) {
@@ -45,7 +43,7 @@ public class Container {
         return "Container{" +
                 "id=" + id +
                 ", length=" + length +
-                ", slotId=" + slotId +
+                ", slotIds =" + slotIds +
                 '}';
     }
 }

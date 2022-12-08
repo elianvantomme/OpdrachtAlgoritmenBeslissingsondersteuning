@@ -100,11 +100,17 @@ public class InputReader {
             int containerId = (int) (long) j.get("container_id");
             int slotId = (int) (long) j.get("slot_id");
             Container container = containerMap.get(containerId);
-            container.setSlotId(slotId);
-            initialGrid.get(slotId).addContainer(container);
+            List<Integer> allSlotIds = new ArrayList<>();
+            for (int i = slotId; i < slotId + container.getLength(); i++) {
+                initialGrid.get(i).addContainer(container);
+                allSlotIds.add(i);
+
+            }
+            container.setSlotId(allSlotIds);
+            containerMap.put(containerId, container);
         }
 
-        return new Yard(initialGrid, makeCraneMap(), makeContainerMap());
+        return new Yard(initialGrid, makeCraneMap(), containerMap);
     }
 
     public Instance getInstance() throws IOException, ParseException {

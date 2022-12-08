@@ -2,6 +2,7 @@ package main;
 
 import container.Container;
 import crane.Crane;
+import crane.Movement;
 import input.InputReader;
 import input.Instance;
 import org.json.simple.parser.ParseException;
@@ -16,12 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-    public static void moveContainer(Container container, Slot destinationSlot, Yard yard, List<Crane> cranes){
-
+    public static void moveContainer(Container container, Slot initialSlot, Slot destinationSlot,List<Crane> cranes, Map<Integer, Slot> grid){
+        /*
+        Gaan checken ofdat het mogelijk is om hem daar te plaatsen
+            -   Geen enkele op een dubbele
+            -   Niet overschrijdven van de max height
+            -   Kraan moet er kunnen raken
+        */
     }
 
-    public static boolean isContainerCorrect(Instance instance, Container container, Slot slot){
-        if(container.getSlotId() == )
+    public static boolean isContainerCorrect(Container container, Slot slot){
+        return slot.getContainerList().contains(container);
     }
 
     public static void makeDesiredYard(Instance instance) {
@@ -33,11 +39,28 @@ public class Main {
         Map<Integer, Integer> desiredGrid = targetYard.getAssignments();
         Map<Integer, Container> containerMap = initialYard.getContainerMap();
         List<Container> correctContainersList = new ArrayList<>();
+        System.out.println(desiredGrid);
         for (Map.Entry<Integer, Integer> entry : desiredGrid.entrySet()) {
-            Slot slot = initialGrid
+            Slot destinationSlot = initialGrid.get(entry.getValue());
+            Container container = containerMap.get(entry.getKey());
+            if (isContainerCorrect(container,destinationSlot)){
+                correctContainersList.add(container);
+            }else{
+                int slotId = container.getSlotIds().get(0);
+                Slot initialSlot = initialGrid.get(slotId);
+
+
+                System.out.println("Initial "+ initialSlot);
+                System.out.println("Destination "+ destinationSlot);
+                System.out.println();
+            }
+//            System.out.println(entry);
+//            System.out.println(container);
+//            System.out.println(slot);
+//            System.out.println();
         }
 
-        System.out.println(initialGrid.toString());
+//        System.out.println(initialGrid.toString());
     }
 
     public static void main(String[] args) throws IOException, ParseException {
@@ -45,10 +68,7 @@ public class Main {
         File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
         InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
         Instance instance = inputReader.getInstance();
-
-
-
-
+        makeDesiredYard(instance);
 
     }
 }

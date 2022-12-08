@@ -11,12 +11,15 @@ public class Movement {
     private double startTime;
     private double travelTime;
     private double endTime;
+    static private double globalTime = 0;
 
-    public Movement(Slot p1, Slot p2, double startTime){
+    public Movement(Slot p1, Slot p2){
         this.p1 = p1;
         this.p2 = p2;
-        this.startTime = startTime;
+        this.startTime = globalTime;
         calculateTravelTime();
+        globalTime = endTime;
+
     }
 
     private void calculateTravelTime(){
