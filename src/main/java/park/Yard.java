@@ -2,11 +2,8 @@ package park;
 
 import container.Container;
 import crane.Crane;
-import point.Slot;
+import slot.Slot;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Yard {
@@ -19,7 +16,7 @@ public class Yard {
         this.grid = grid;
         this.craneMap = craneMap;
         this.containerMap = containerMap;
-        System.out.println("craneMap = " + craneMap);
+//        System.out.println("craneMap = " + craneMap);
     }
 
     public Map<Integer, Slot> getGrid() {
@@ -32,5 +29,14 @@ public class Yard {
 
     public Map<Integer, Container> getContainerMap() {
         return containerMap;
+    }
+
+    @Override
+    public String toString() {
+        return "Yard{" +
+                "grid=" + grid +
+                ", craneMap=" + craneMap +
+                ", containerMap=" + containerMap +
+                '}';
     }
 }

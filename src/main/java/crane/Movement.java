@@ -1,7 +1,6 @@
 package crane;
 
-import container.Container;
-import point.Slot;
+import slot.Slot;
 
 public class Movement {
     private Slot p1;

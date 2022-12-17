@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class TargetYard {
     private int maxHeight;
-    Map<Integer, Integer> assignments;
+    private Map<Integer, Integer> assignments;
 
     public TargetYard(int maxHeight, Map<Integer, Integer> assignments) {
         this.maxHeight = maxHeight;

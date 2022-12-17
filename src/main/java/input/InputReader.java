@@ -8,7 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import park.TargetYard;
 import park.Yard;
-import point.Slot;
+import slot.Slot;
 
 import java.io.File;
 import java.io.FileReader;

@@ -1,8 +1,7 @@
-package point;
+package slot;
 
 import container.Container;
 
-import java.util.List;
 import java.util.Stack;
 
 public class Slot {
@@ -11,13 +10,13 @@ public class Slot {
     private int x;
     private int y;
     private static int maxHeight;
-    private Stack<Container> containerList;
+    private Stack<Container> containerStack;
 
     public Slot(int id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
-        containerList = new Stack<>();
+        containerStack = new Stack<>();
     }
 
     public int getX() {
@@ -33,11 +32,11 @@ public class Slot {
     }
 
     public void addContainer(Container container){
-        containerList.add(container);
+        containerStack.add(container);
     }
 
-    public Stack<Container> getContainerList() {
-        return containerList;
+    public Stack<Container> getContainerStack() {
+        return containerStack;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class Slot {
                 "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
-                ", containerList=" + containerList +
+                ", containerStack=" + containerStack +
                 '}';
     }
 }
