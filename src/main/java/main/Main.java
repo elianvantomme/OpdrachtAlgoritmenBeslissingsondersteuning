@@ -26,13 +26,24 @@ public class Main {
         */
     }
 
+    public static void moveSingleWrongContainer(Container container, Instance instance){
+
+    }
+
+    public static void moveStackOfContainers(){
+
+    }
+
+
+
     public static void moveContainer(Instance instance, List<List<Container>> wrongContainers){
         Container containerToMove = wrongContainers.get(0).get(0);
         // aparte methoden als er wel of niet containers bovenop staan die we moeten eerst verplaatsen
         if(wrongContainers.get(0).size()==1){
-            
+            moveSingleWrongContainer();
         }else{
-
+            moveStackOfContainers();
+            moveSingleWrongContainer();
         }
     }
 

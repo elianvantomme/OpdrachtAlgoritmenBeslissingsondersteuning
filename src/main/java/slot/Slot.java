@@ -5,7 +5,7 @@ import container.Container;
 import java.util.Stack;
 
 public class Slot {
-
+    private int testing;
     private int id;
     private int x;
     private int y;
