@@ -52,8 +52,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
-        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
+        File initialYardFile = new File("src/main/instances/instances1/5t/TerminalB_20_10_3_2_160.json");
+        File targetYardFile = new File("src/main/instances/instances1/5t/targetTerminalB_20_10_3_2_160.json");
         InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
         Instance instance = inputReader.getInstance();
         Containers containers = instance.getContainers();

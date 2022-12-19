@@ -23,13 +23,15 @@ public class Containers {
     private List<Container> getContainersOnTop(Slot slot, Container container){
         Stack<Container> containerStack = slot.getContainerStack();
         List<Container> containersOnTop = new ArrayList<>();
-        for (int i = 0; i < containerStack.size(); i++) {
+        System.out.println("container waar mogelijk containers op staan = " + container);
+        for (int i = containerStack.size()-1; i >= 0 ; i--) {
             Container potentialOnTop = containerStack.get(i);
+            System.out.println("potentialOnTop = " + potentialOnTop);
             if(potentialOnTop.getId() == container.getId()){
                 break;
             }
             else {
-                containersOnTop.add(potentialOnTop);
+                containersOnTop.add(0, potentialOnTop);
             }
         }
         return containersOnTop;
@@ -39,8 +41,7 @@ public class Containers {
         List<List<Container>> wrongContainers = new ArrayList<>();
         for(Container container : containerMap.values()){
             if(!checkContainerCorrectSpot(container)){
-                System.out.println("container = " + container);
-                Slot slot = grid.getSlot(container.getTargetSlotId());
+                Slot slot = grid.getSlot(container.getSlotId());
                 List<Container> containersToBeMoved = new ArrayList<>(Arrays.asList(container));
                 containersToBeMoved.addAll(getContainersOnTop(slot, container));
                 wrongContainers.add(containersToBeMoved);
