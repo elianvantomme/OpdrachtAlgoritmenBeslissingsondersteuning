@@ -60,4 +60,32 @@ public class Crane {
                 ", holdingContainer=" + holdingContainer +
                 '}';
     }
+
+    public int getxMax() {
+        return xMax;
+    }
+
+    public int getxMin() {
+        return xMin;
+    }
+
+    public void updateCrane(double xTarget, double yTarget) {
+        this.x = xTarget;
+        this.y = yTarget;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    //an ideal crane can pick up and drop of a crane
+    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
+        if (xMin <= currentContainerX && currentContainerX <= xMax) {
+            if (xMin <= targetSlotX && targetSlotX <= xMax) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
