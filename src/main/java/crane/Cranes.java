@@ -35,7 +35,30 @@ public class Cranes {
                 idealCranes.add(crane);
             }
         }
-
         return idealCranes;
+    }
+
+    public List<Crane> getNonIdealCranes(Slot currentSlot, Slot targetSlot) {
+        List<Crane> nonIdealCranes = new ArrayList<>();
+        Crane pickupCrane = null;
+        Crane dropOffCrane = null;
+        for (Crane crane : craneMap.values()) {
+            if (crane.checkCraneCanPickUp(currentSlot.getX())) pickupCrane = crane;
+            if (crane.checkCraneCanDropOff(targetSlot.getY())) dropOffCrane = crane;
+        }
+        nonIdealCranes.add(pickupCrane);
+        nonIdealCranes.add(dropOffCrane);
+        return nonIdealCranes;
+    }
+
+    public Crane isPathFree(Slot targetSlot, Slot initialSlot, Crane idealCrane, Container containerToMove) {
+        boolean isPathFree = false;
+        for (Crane crane: craneMap.values()) {
+            //Move buiten het gebied
+            if(crane.isInTheWay(targetSlot, idealCrane, crane)){
+                return crane;
+            };
+        }
+        return null;
     }
 }

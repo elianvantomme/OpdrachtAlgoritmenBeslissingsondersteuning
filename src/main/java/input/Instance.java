@@ -12,20 +12,14 @@ import slot.Slot;
 import java.util.Map;
 
 public class Instance {
-    private int maxHeight;
     private Grid grid;
     private Cranes cranes;
     private Containers containers;
 
-    public Instance(int maxHeight, Grid grid, Cranes cranes, Containers containers) {
-        this.maxHeight = maxHeight;
+    public Instance(Grid grid, Cranes cranes, Containers containers) {
         this.grid = grid;
         this.cranes = cranes;
         this.containers = containers;
-    }
-
-    public int getMaxHeight() {
-        return maxHeight;
     }
 
     public Grid getGrid() {
@@ -43,7 +37,6 @@ public class Instance {
     @Override
     public String toString() {
         return "Instance{" +
-                "maxHeight=" + maxHeight +
                 ", grid=" + grid +
                 ", cranes=" + cranes +
                 ", containers=" + containers +

@@ -20,13 +20,12 @@ public class Containers {
         return container.getSlotId() == container.getTargetSlotId();
     }
 
+    //TODO verzet dit naar slot klasse
     private List<Container> getContainersOnTop(Slot slot, Container container){
         Stack<Container> containerStack = slot.getContainerStack();
         List<Container> containersOnTop = new ArrayList<>();
-        System.out.println("container waar mogelijk containers op staan = " + container);
         for (int i = containerStack.size()-1; i >= 0 ; i--) {
             Container potentialOnTop = containerStack.get(i);
-            System.out.println("potentialOnTop = " + potentialOnTop);
             if(potentialOnTop.getId() == container.getId()){
                 break;
             }

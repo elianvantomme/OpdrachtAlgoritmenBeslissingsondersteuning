@@ -40,7 +40,10 @@ public class InputReader {
             );
             gridMap.put(s.getId(), s);
         }
-        Grid grid = new Grid(gridMap);
+        int maxHeight = (int) (long) initialYardJsonObject.get("maxheight");
+        int length = (int) (long) initialYardJsonObject.get("length");
+        int width = (int) (long) initialYardJsonObject.get("width");
+        Grid grid = new Grid(gridMap, maxHeight, length, width);
         return grid;
     }
 
@@ -108,8 +111,6 @@ public class InputReader {
         System.out.println("containers = " + containers);
         Cranes cranes = makeCranes();
         System.out.println("cranes = " + cranes);
-        int maxHeight = (int) (long) targetYardJsonObject.get("maxheight");
-        System.out.println("maxHeight = " + maxHeight);
-        return new Instance(maxHeight, grid, cranes, containers);
+        return new Instance(grid, cranes, containers);
     }
 }

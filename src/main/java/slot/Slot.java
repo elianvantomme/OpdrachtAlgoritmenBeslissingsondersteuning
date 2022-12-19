@@ -17,6 +17,26 @@ public class Slot {
         containerStack = new Stack<>();
     }
 
+    public boolean isMaxHeight(int maxHeight) {
+        return containerStack.size() == maxHeight;
+    }
+
+    public int getHeight(){
+        return containerStack.size();
+    }
+
+    public Container getContainerAtHeight(int height){
+        return containerStack.get(height-1);
+    }
+
+    public Container popContainer(){
+        return containerStack.pop();
+    }
+
+    public void putContainer(Container container){
+        containerStack.push(container);
+    }
+
     public int getX() {
         return x;
     }
@@ -29,17 +49,7 @@ public class Slot {
         return id;
     }
 
-    public void addContainer(Container container){
-        containerStack.add(container);
-    }
 
-    public Container popContainer(){
-        return containerStack.pop();
-    }
-
-    public void putContainer(Container container){
-        containerStack.push(container);
-    }
 
     public Stack<Container> getContainerStack() {
         return containerStack;
@@ -54,4 +64,5 @@ public class Slot {
                 ", containerStack=" + containerStack +
                 '}';
     }
+
 }

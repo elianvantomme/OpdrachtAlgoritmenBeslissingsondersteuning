@@ -25,6 +25,30 @@ public class Crane {
         this.ySpeed = ySpeed;
     }
 
+//    //an ideal crane can pick up and drop of a crane
+//    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
+//        if (xMin <= currentContainerX && currentContainerX <= xMax) {
+//                if (xMin <= targetSlotX && targetSlotX <= xMax) {
+//                    return true;
+//                }
+//        }
+//        return false;
+//    }
+
+    //an ideal crane can pick up and drop of a crane
+    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
+        return checkCraneCanPickUp(currentContainerX) && checkCraneCanDropOff(targetSlotX);
+    }
+
+    public boolean checkCraneCanPickUp(int currentContainerX){
+        return xMin <= currentContainerX && currentContainerX <= xMax;
+    }
+
+    public boolean checkCraneCanDropOff(int targetSlotX){
+        return xMin <= targetSlotX && targetSlotX <= xMax;
+    }
+
+
     public double getX() {
         return x;
     }
@@ -78,14 +102,8 @@ public class Crane {
         return id;
     }
 
-    //an ideal crane can pick up and drop of a crane
-    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
-        if (xMin <= currentContainerX && currentContainerX <= xMax) {
-            if (xMin <= targetSlotX && targetSlotX <= xMax) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isInTheWay(Slot targetSlot, Crane idealCrane, Crane crane) {
+        return (idealCrane.getX() <= crane.getX() && crane.getX() <= targetSlot.getX())
+                || (targetSlot.getX() <= crane.getX() && crane.getX() <= idealCrane.getX());
     }
-
 }
