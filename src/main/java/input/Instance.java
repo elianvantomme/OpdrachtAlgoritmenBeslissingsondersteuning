@@ -1,23 +1,17 @@
 package input;
 
+import container.Container;
+import crane.Crane;
 import park.TargetYard;
 import park.Yard;
+import slot.Slot;
+
+import java.util.Map;
 
 public class Instance {
-    private Yard initialYard;
-    private TargetYard desiredYard;
+    private Map<Integer, Slot> grid;
+    private Map<Integer, Crane> craneMap;
+    private Map<Integer, Container> containerMap;
 
-    public Instance(Yard initialYard, TargetYard desiredYard) {
-        this.initialYard = initialYard;
-        this.desiredYard = desiredYard;
-    }
-
-    public TargetYard getDesiredYard() {
-        return desiredYard;
-    }
-
-    public Yard getInitialYard() {
-        return initialYard;
-    }
 
 }

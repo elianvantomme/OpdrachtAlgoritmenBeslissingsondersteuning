@@ -16,14 +16,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class InputReader {
-    private File initialYardFile;
-    private File targetYardFile;
     private JSONObject initialYardJsonObject;
     private JSONObject targetYardJsonObject;
 
     public InputReader(File initialYardFile, File targetYardFile) throws IOException, ParseException {
-        this.initialYardFile = initialYardFile;
-        this.targetYardFile = targetYardFile;
         initialYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(initialYardFile));
         targetYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(targetYardFile));
     }
@@ -77,43 +73,43 @@ public class InputReader {
         return craneMap;
     }
 
-    public TargetYard makeTargetYard() {
-        int maxHeight = (int) (long) targetYardJsonObject.get("maxheight");
-        JSONArray assignments = (JSONArray) targetYardJsonObject.get("assignments");
-        Iterator<JSONObject> itr = assignments.iterator();
-        Map<Integer, Integer> assignmentsMap = new HashMap<>();
-        while (itr.hasNext()) {
-            JSONObject j = itr.next();
-            assignmentsMap.put((int) (long) j.get("container_id"), (int) (long) j.get("slot_id"));
-        }
-        return new TargetYard(maxHeight, assignmentsMap);
-    }
-
-    public Yard getYard() throws IOException, ParseException {
-        Map<Integer, Slot> initialGrid = makeGrid();
-        Map<Integer, Container> containerMap = makeContainerMap();
-
-        JSONArray assignments = (JSONArray) initialYardJsonObject.get("assignments");
-        Iterator<JSONObject> itr1 = assignments.iterator();
-        while (itr1.hasNext()) {
-            JSONObject j = itr1.next();
-            int containerId = (int) (long) j.get("container_id");
-            int slotId = (int) (long) j.get("slot_id");
-            Container container = containerMap.get(containerId);
-            List<Integer> allSlotIds = new ArrayList<>();
-            for (int i = slotId; i < slotId + container.getLength(); i++) {
-                initialGrid.get(i).addContainer(container);
-                allSlotIds.add(i);
-
-            }
-            container.setSlotId(allSlotIds);
-            containerMap.put(containerId, container);
-        }
-
-        return new Yard(initialGrid, makeCraneMap(), containerMap);
-    }
+//    public TargetYard makeTargetYard() {
+//        int maxHeight = (int) (long) targetYardJsonObject.get("maxheight");
+//        JSONArray assignments = (JSONArray) targetYardJsonObject.get("assignments");
+//        Iterator<JSONObject> itr = assignments.iterator();
+//        Map<Integer, Integer> assignmentsMap = new HashMap<>();
+//        while (itr.hasNext()) {
+//            JSONObject j = itr.next();
+//            assignmentsMap.put((int) (long) j.get("container_id"), (int) (long) j.get("slot_id"));
+//        }
+//        return new TargetYard(maxHeight, assignmentsMap);
+//    }
+//
+//    public Yard getYard() throws IOException, ParseException {
+//        Map<Integer, Slot> initialGrid = makeGrid();
+//        Map<Integer, Container> containerMap = makeContainerMap();
+//
+//        JSONArray assignments = (JSONArray) initialYardJsonObject.get("assignments");
+//        Iterator<JSONObject> itr1 = assignments.iterator();
+//        while (itr1.hasNext()) {
+//            JSONObject j = itr1.next();
+//            int containerId = (int) (long) j.get("container_id");
+//            int slotId = (int) (long) j.get("slot_id");
+//            Container container = containerMap.get(containerId);
+//            List<Integer> allSlotIds = new ArrayList<>();
+//            for (int i = slotId; i < slotId + container.getLength(); i++) {
+//                initialGrid.get(i).addContainer(container);
+//                allSlotIds.add(i);
+//
+//            }
+//            container.setSlotId(allSlotIds);
+//            containerMap.put(containerId, container);
+//        }
+//
+//        return new Yard(initialGrid, makeCraneMap(), containerMap);
+//    }
 
     public Instance getInstance() throws IOException, ParseException {
-        return new Instance(getYard(), makeTargetYard());
+
     }
 }
