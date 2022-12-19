@@ -5,11 +5,9 @@ import container.Container;
 import java.util.Stack;
 
 public class Slot {
-    private int testing;
     private int id;
     private int x;
     private int y;
-    private static int maxHeight;
     private Stack<Container> containerStack;
 
     public Slot(int id, int x, int y) {

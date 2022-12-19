@@ -5,8 +5,8 @@ import java.util.List;
 public class Container {
     private int id;
     private int length;
-//    private List<Integer> slotIds;
-    private List<Integer> slotIds;
+    private int slotId;
+    private int targetSlotId;
 
     public Container(int id, int length) {
         this.id = id;
@@ -19,12 +19,8 @@ public class Container {
         return length;
     }
 
-    public void setSlotId(List<Integer> slotIds) {
-        this.slotIds = slotIds;
-    }
-
-    public List<Integer> getSlotIds() {
-        return slotIds;
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
     }
 
     //    public void addSlotId(int slotId) {
@@ -39,12 +35,25 @@ public class Container {
         return id;
     }
 
+    public void setTargetSlotId(int targetSlotId) {
+        this.targetSlotId = targetSlotId;
+    }
+
+    public int getSlotId() {
+        return slotId;
+    }
+
+    public int getTargetSlotId() {
+        return targetSlotId;
+    }
+
     @Override
     public String toString() {
         return "Container{" +
                 "id=" + id +
                 ", length=" + length +
-                ", slotIds =" + slotIds +
+                ", slotId=" + slotId +
+                ", targetSlotId=" + targetSlotId +
                 '}';
     }
 }
