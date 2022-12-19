@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import park.Grid;
 import park.TargetYard;
 import park.Yard;
 import slot.Slot;
@@ -37,6 +38,7 @@ public class InputReader {
             );
             grid.put(s.getId(), s);
         }
+        Grid grid = new Grid()
         return grid;
     }
 
@@ -110,6 +112,6 @@ public class InputReader {
 //    }
 
     public Instance getInstance() throws IOException, ParseException {
-
+        Grid grid = makeGrid();
     }
 }
