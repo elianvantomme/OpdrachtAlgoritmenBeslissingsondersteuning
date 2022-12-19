@@ -1,10 +1,12 @@
 package main;
 
 import container.Container;
+import container.Containers;
 import crane.Crane;
 import input.InputReader;
 import input.Instance;
 import org.json.simple.parser.ParseException;
+import park.Grid;
 import park.TargetYard;
 import park.Yard;
 import slot.Slot;
@@ -26,99 +28,23 @@ public class Main {
         */
     }
 
+    public static void moveSingleWrongContainer(Container container, Instance instance){
+
+    }
+
+    public static void moveStackOfContainers(){
+
+    }
+
     public static void moveContainer(Instance instance, List<List<Container>> wrongContainers){
         Container containerToMove = wrongContainers.get(0).get(0);
         // aparte methoden als er wel of niet containers bovenop staan die we moeten eerst verplaatsen
         if(wrongContainers.get(0).size()==1){
-            
+//            moveSingleWrongContainer();
         }else{
-
+            moveStackOfContainers();
+//            moveSingleWrongContainer();
         }
-    }
-
-    //TODO dit misschien beter in de Slot klasse zetten
-    public static boolean isContainerCorrect(Container container, Slot slot){
-        return slot.getContainerStack().contains(container);
-    }
-
-    //TODO misschien dit in de instance reader zetten ?
-    public static void makeDesiredYard(Instance instance) {
-        Yard initialYard = instance.getInitialYard();
-        TargetYard targetYard = instance.getDesiredYard();
-        // key: slotId, value: slot
-        Map<Integer, Slot> initialGrid = initialYard.getGrid();
-        // key: containerId, value: slotId
-        Map<Integer, Integer> desiredGrid = targetYard.getAssignments();
-        Map<Integer, Container> containerMap = initialYard.getContainerMap();
-        List<Container> correctContainersList = new ArrayList<>();
-//        System.out.println(desiredGrid);
-        for (Map.Entry<Integer, Integer> entry : desiredGrid.entrySet()) {
-            Slot destinationSlot = initialGrid.get(entry.getValue());
-            Container container = containerMap.get(entry.getKey());
-            if (isContainerCorrect(container,destinationSlot)){
-                correctContainersList.add(container);
-            }else{
-                int slotId = container.getSlotIds().get(0);
-                Slot initialSlot = initialGrid.get(slotId);
-
-
-//                System.out.println("Initial "+ initialSlot);
-//                System.out.println("Destination "+ destinationSlot);
-//                System.out.println();
-            }
-//            System.out.println(entry);
-//            System.out.println(container);
-//            System.out.println(slot);
-//            System.out.println();
-        }
-
-//        System.out.println(initialGrid.toString());
-    }
-
-    public static boolean checkContainerCorrectSpot(Container container, int correctSlot){
-        return container.getSlotIds().get(0) == correctSlot;
-    }
-
-
-    public static List<Container> getContainersOnTop(Slot slot, Container container){
-        Stack<Container> containerStack = slot.getContainerStack();
-        List<Container> containersOnTop = new ArrayList<>();
-        for (int i = 0; i < containerStack.size(); i++) {
-            Container potentialOnTop = containerStack.get(i);
-            if(potentialOnTop.getId() == container.getId()){
-                break;
-            }
-            else {
-                containersOnTop.add(potentialOnTop);
-            }
-        }
-        return containersOnTop;
-    }
-
-
-    public static List<List<Container>> getWrongContainers(Instance instance){
-        Yard initialYard = instance.getInitialYard();
-        TargetYard targetYard = instance.getDesiredYard();
-        Map<Integer, Slot> initialGrid = initialYard.getGrid();
-        Map<Integer, Integer> desiredGrid = targetYard.getAssignments();
-        Map<Integer, Container> containerMap = initialYard.getContainerMap();
-
-        List<List<Container>> wrongContainers = new ArrayList<>();
-
-        for(Container container : containerMap.values()){
-//            System.out.println("container = " + container + " ==> desired slot = " + desiredGrid.get(container.getId()));
-            if(!checkContainerCorrectSpot(container, desiredGrid.get(container.getId()))){
-                Slot slot = instance.getInitialYard().getGrid().get(container.getSlotIds().get(0));
-                List<Container> containersToBeMoved = new ArrayList<>(Arrays.asList(container));
-                containersToBeMoved.addAll(getContainersOnTop(slot, container));
-                wrongContainers.add(containersToBeMoved);
-            }
-        }
-        Collections.sort(wrongContainers, Comparator.comparingInt(List::size)); // zo kunnen we eerst de containers moven waar er geen op hun kop staan
-        for(List<Container> containers : wrongContainers){
-            System.out.println("containers = " + containers);
-        }
-        return wrongContainers;
     }
 
     public static boolean isFinished(List<List<Container>> wrongContainers){
@@ -130,21 +56,16 @@ public class Main {
         File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
         InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
         Instance instance = inputReader.getInstance();
-        makeDesiredYard(instance); //TODO dit in instance reader zetten?
+        Containers containers = instance.getContainers();
+        Grid grid = instance.getGrid();
 
-        System.out.println("instance.getInitialYard().getGrid() = " + instance.getInitialYard().getGrid());
-        List<List<Container>> wrongContainers = getWrongContainers(instance);
-//        List<Container> wrongContainers = getWrongContainers(instance);
-//        List<Container> containersOnTop = getContainersOnTop();
+        List<List<Container>> wrongContainers = containers.getWrongContainers(grid);
         while(!isFinished(wrongContainers)){
             System.out.println("press enter to continue");
             sc.nextLine();
-            wrongContainers = getWrongContainers(instance);
+            wrongContainers = containers.getWrongContainers(grid);
             moveContainer(instance, wrongContainers);
         }
-
-
-//        System.out.println(instance.getInitialYard());
 
     }
 }

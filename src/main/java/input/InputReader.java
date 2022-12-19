@@ -1,11 +1,14 @@
 package input;
 
 import container.Container;
+import container.Containers;
 import crane.Crane;
+import crane.Cranes;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import park.Grid;
 import park.TargetYard;
 import park.Yard;
 import slot.Slot;
@@ -16,21 +19,17 @@ import java.io.IOException;
 import java.util.*;
 
 public class InputReader {
-    private File initialYardFile;
-    private File targetYardFile;
     private JSONObject initialYardJsonObject;
     private JSONObject targetYardJsonObject;
 
     public InputReader(File initialYardFile, File targetYardFile) throws IOException, ParseException {
-        this.initialYardFile = initialYardFile;
-        this.targetYardFile = targetYardFile;
         initialYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(initialYardFile));
         targetYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(targetYardFile));
     }
 
-    public Map<Integer, Slot> makeGrid() {
+    public Grid makeGrid() {
         JSONArray slots = (JSONArray) initialYardJsonObject.get("slots");
-        Map<Integer, Slot> grid = new HashMap<>();
+        Map<Integer, Slot> gridMap = new HashMap<>();
         Iterator<JSONObject> itr = slots.iterator();
         while (itr.hasNext()) {
             JSONObject j = itr.next();
@@ -39,27 +38,50 @@ public class InputReader {
                     (int) (long) j.get("x"),
                     (int) (long) j.get("y")
             );
-            grid.put(s.getId(), s);
+            gridMap.put(s.getId(), s);
         }
+        Grid grid = new Grid(gridMap);
         return grid;
     }
 
-    public Map<Integer, Container> makeContainerMap() {
+    public Containers makeContainers(Grid grid) {
         Map<Integer, Container> containerMap = new HashMap<>();
-        JSONArray containers = (JSONArray) initialYardJsonObject.get("containers");
-        Iterator<JSONObject> itr = containers.iterator();
+        JSONArray containersJson = (JSONArray) initialYardJsonObject.get("containers");
+        Iterator<JSONObject> itr = containersJson.iterator();
         while (itr.hasNext()) {
             JSONObject j = itr.next();
             Container c = new Container((int) (long) j.get("id"), (int) (long) j.get("length"));
             containerMap.put(c.getId(), c);
         }
-        return containerMap;
+
+        JSONArray initialAssignments = (JSONArray) initialYardJsonObject.get("assignments");
+        Iterator<JSONObject> itr1 = initialAssignments.iterator();
+        while (itr1.hasNext()) {
+            JSONObject j = itr1.next();
+            int containerId = (int) (long) j.get("container_id");
+            int slotId = (int) (long) j.get("slot_id");
+            Container container = containerMap.get(containerId);
+            container.setSlotId(slotId);
+            grid.putContainerOnSlot(container, slotId);
+        }
+
+        Containers containers = new Containers(containerMap);
+
+        JSONArray targetAssignments = (JSONArray) targetYardJsonObject.get("assignments");
+        itr = targetAssignments.iterator();
+        while (itr.hasNext()) {
+            JSONObject j = itr.next();
+            containers.setTargetSlotId((int)(long) j.get("container_id"), (int)(long) j.get("slot_id"));
+        }
+
+        return containers;
     }
 
-    public Map<Integer, Crane> makeCraneMap() {
+
+    public Cranes makeCranes() {
         Map<Integer, Crane> craneMap = new HashMap<>();
-        JSONArray cranes = (JSONArray) initialYardJsonObject.get("cranes");
-        Iterator<JSONObject> itr = cranes.iterator();
+        JSONArray cranesJson = (JSONArray) initialYardJsonObject.get("cranes");
+        Iterator<JSONObject> itr = cranesJson.iterator();
         while (itr.hasNext()) {
             JSONObject j = itr.next();
             craneMap.put((int) (long) j.get("id"), new Crane(
@@ -74,46 +96,20 @@ public class InputReader {
                     (int) (long) j.get("yspeed")
             ));
         }
-        return craneMap;
+        Cranes cranes = new Cranes(craneMap);
+        return cranes;
     }
 
-    public TargetYard makeTargetYard() {
-        int maxHeight = (int) (long) targetYardJsonObject.get("maxheight");
-        JSONArray assignments = (JSONArray) targetYardJsonObject.get("assignments");
-        Iterator<JSONObject> itr = assignments.iterator();
-        Map<Integer, Integer> assignmentsMap = new HashMap<>();
-        while (itr.hasNext()) {
-            JSONObject j = itr.next();
-            assignmentsMap.put((int) (long) j.get("container_id"), (int) (long) j.get("slot_id"));
-        }
-        return new TargetYard(maxHeight, assignmentsMap);
-    }
-
-    public Yard getYard() throws IOException, ParseException {
-        Map<Integer, Slot> initialGrid = makeGrid();
-        Map<Integer, Container> containerMap = makeContainerMap();
-
-        JSONArray assignments = (JSONArray) initialYardJsonObject.get("assignments");
-        Iterator<JSONObject> itr1 = assignments.iterator();
-        while (itr1.hasNext()) {
-            JSONObject j = itr1.next();
-            int containerId = (int) (long) j.get("container_id");
-            int slotId = (int) (long) j.get("slot_id");
-            Container container = containerMap.get(containerId);
-            List<Integer> allSlotIds = new ArrayList<>();
-            for (int i = slotId; i < slotId + container.getLength(); i++) {
-                initialGrid.get(i).addContainer(container);
-                allSlotIds.add(i);
-
-            }
-            container.setSlotId(allSlotIds);
-            containerMap.put(containerId, container);
-        }
-
-        return new Yard(initialGrid, makeCraneMap(), containerMap);
-    }
 
     public Instance getInstance() throws IOException, ParseException {
-        return new Instance(getYard(), makeTargetYard());
+        Grid grid = makeGrid();
+        Containers containers = makeContainers(grid);
+        System.out.println("grid = " + grid);
+        System.out.println("containers = " + containers);
+        Cranes cranes = makeCranes();
+        System.out.println("cranes = " + cranes);
+        int maxHeight = (int) (long) targetYardJsonObject.get("maxheight");
+        System.out.println("maxHeight = " + maxHeight);
+        return new Instance(maxHeight, grid, cranes, containers);
     }
 }
