@@ -20,17 +20,18 @@ public class Movement {
     private double xSpeed;
     private double ySpeed;
     private double startTime;
-    private double travelTime;
+    private double travelTimeWithContainer;
     private double endTime;
+    private double travelTimeEmpty;
     static private double globalTime = 0;
 
     public Movement(Slot initialSlot, Slot targetSlot, Crane crane, Container container){
         this.initialSlot = initialSlot;
         this.targetSlot = targetSlot;
-        this.xInitial = initialSlot.getX() + container.getLength();
+        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
         this.yInitial = initialSlot.getY() + 0.5;
-        this.xTarget = targetSlot.getX();
-        this.yTarget = targetSlot.getY();
+        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
+        this.yTarget = targetSlot.getY() + 0.5;
         this.startTime = globalTime;
         this.crane = crane;
         this.container = container;
@@ -40,10 +41,15 @@ public class Movement {
     }
 
     private void calculateTravelTime(){
-        double deltaX = Math.abs(xTarget- xInitial);
-        double deltaY = Math.abs(yTarget - yInitial);
-        travelTime = Math.max(deltaX, deltaY);
-        endTime = startTime + travelTime;
+        double deltaX = Math.abs(xInitial- crane.getX());
+        double deltaY = Math.abs(yInitial - crane.getY());
+        travelTimeEmpty = Math.max(deltaX, deltaY);
+        startTime = globalTime + travelTimeEmpty;
+
+        double deltaX2 = Math.abs(xTarget- xInitial);
+        double deltaY2 = Math.abs(yTarget - yInitial);
+        travelTimeWithContainer = Math.max(deltaX2, deltaY2);
+        endTime = startTime + travelTimeWithContainer;
     }
 
     public double getGlobalTime() {
