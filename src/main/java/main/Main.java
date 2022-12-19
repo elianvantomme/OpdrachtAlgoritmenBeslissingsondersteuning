@@ -78,6 +78,7 @@ public class Main {
         STAP 1.5: Is het pad vrij
          */
 
+
         /*
         STAP 2: Move kraan naar de locatie
          */

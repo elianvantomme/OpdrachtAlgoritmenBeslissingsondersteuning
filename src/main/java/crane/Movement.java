@@ -39,6 +39,19 @@ public class Movement {
         crane.updateCrane(xTarget, yTarget);
         globalTime = endTime;
     }
+    public Movement(Slot initialSlot, Slot targetSlot, Crane crane){
+        this.initialSlot = initialSlot;
+        this.targetSlot = targetSlot;
+        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
+        this.yInitial = initialSlot.getY() + 0.5;
+        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
+        this.yTarget = targetSlot.getY() + 0.5;
+        this.startTime = globalTime;
+        this.crane = crane;
+        calculateTravelTime();
+        crane.updateCrane(xTarget, yTarget);
+        globalTime = endTime;
+    }
 
     private void calculateTravelTime(){
         double deltaX = Math.abs(xInitial- crane.getX());

@@ -1,5 +1,8 @@
 package crane;
 
+import container.Container;
+import slot.Slot;
+
 public class Crane {
 
     private int id;

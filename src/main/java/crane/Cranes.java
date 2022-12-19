@@ -1,5 +1,6 @@
 package crane;
 
+import container.Container;
 import slot.Slot;
 
 import java.util.ArrayList;
