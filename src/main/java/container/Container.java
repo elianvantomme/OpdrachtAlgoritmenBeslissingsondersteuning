@@ -11,7 +11,10 @@ public class Container {
     public Container(int id, int length) {
         this.id = id;
         this.length = length;
-//        slotIds = new ArrayList<>();
+    }
+
+    public void update(int slotId) {
+        this.slotId = slotId;
     }
 
 
@@ -30,6 +33,10 @@ public class Container {
 //    public List<Integer> getSlotIds() {
 //        return slotIds;
 //    }
+
+    public boolean isInCorrectSlot(){
+        return slotId == targetSlotId;
+    }
 
     public int getId() {
         return id;
@@ -56,4 +63,5 @@ public class Container {
                 ", targetSlotId=" + targetSlotId +
                 '}';
     }
+
 }

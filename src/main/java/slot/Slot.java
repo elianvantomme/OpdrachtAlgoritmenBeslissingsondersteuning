@@ -33,6 +33,14 @@ public class Slot {
         containerStack.add(container);
     }
 
+    public Container popContainer(){
+        return containerStack.pop();
+    }
+
+    public void putContainer(Container container){
+        containerStack.push(container);
+    }
+
     public Stack<Container> getContainerStack() {
         return containerStack;
     }

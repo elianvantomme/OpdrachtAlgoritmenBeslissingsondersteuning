@@ -10,8 +10,6 @@ import input.InputReader;
 import input.Instance;
 import org.json.simple.parser.ParseException;
 import park.Grid;
-import park.TargetYard;
-import park.Yard;
 import slot.Slot;
 
 import java.io.File;
@@ -21,14 +19,22 @@ import java.util.*;
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
+    static Movements movements = new Movements();
 
-    public static void moveContainer(Container container, Slot initialSlot, Slot destinationSlot,List<Crane> cranes, Map<Integer, Slot> grid){
-        /*
-        Gaan checken ofdat het mogelijk is om hem daar te plaatsen
-            -   Geen enkele op een dubbele
-            -   Niet overschrijdven van de max height
-            -   Kraan moet er kunnen raken
-        */
+//    public static void moveContainer(Container container, Slot initialSlot, Slot destinationSlot,List<Crane> cranes, Map<Integer, Slot> grid){
+//        /*
+//        Gaan checken ofdat het mogelijk is om hem daar te plaatsen
+//            -   Geen enkele op een dubbele
+//            -   Niet overschrijdven van de max height
+//            -   Kraan moet er kunnen raken
+//        */
+//    }
+
+
+    public static void moveWithIdealContainer(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove){
+        Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
+        System.out.println("\n"+movement +"\n");
+        movements.addMovement(movement);
     }
 
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
@@ -86,8 +92,12 @@ public class Main {
         }
     }
 
-    public static boolean isFinished(List<List<Container>> wrongContainers){
-        return wrongContainers.isEmpty();
+//    public static boolean isFinished(List<List<Container>> wrongContainers){
+//        return wrongContainers.isEmpty();
+//    }
+
+    public static boolean isFinished(Containers containers){
+        return containers.isFinished();
     }
 
     public static void main(String[] args) throws IOException, ParseException {
