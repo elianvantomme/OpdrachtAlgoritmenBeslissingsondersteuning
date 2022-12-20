@@ -6,7 +6,6 @@ public class Container {
     private int id;
     private int length;
     private int slotId;
-    private int targetSlotId;
 
     public Container(int id, int length) {
         this.id = id;
@@ -17,7 +16,6 @@ public class Container {
         this.slotId = slotId;
     }
 
-
     public int getLength() {
         return length;
     }
@@ -26,33 +24,15 @@ public class Container {
         this.slotId = slotId;
     }
 
-    //    public void addSlotId(int slotId) {
-//        slotIds.add(slotId);
-//    }
-//
-//    public List<Integer> getSlotIds() {
-//        return slotIds;
-//    }
-
-    public boolean isInCorrectSlot(){
-        return slotId == targetSlotId;
-    }
-
     public int getId() {
         return id;
     }
 
-    public void setTargetSlotId(int targetSlotId) {
-        this.targetSlotId = targetSlotId;
-    }
 
     public int getSlotId() {
         return slotId;
     }
 
-    public int getTargetSlotId() {
-        return targetSlotId;
-    }
 
     @Override
     public String toString() {
@@ -60,7 +40,6 @@ public class Container {
                 "id=" + id +
                 ", length=" + length +
                 ", slotId=" + slotId +
-                ", targetSlotId=" + targetSlotId +
                 '}';
     }
 
