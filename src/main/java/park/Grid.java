@@ -31,7 +31,7 @@ public class Grid {
 
     public void putContainerOnSlot(Container container, int slotId) {
         for(int i = slotId ; i<container.getLength()-1; i++){
-            grid.get(slotId).putContainer(container);
+            grid.get(i).putContainer(container);
         }
 //        generateLandScape();
     }

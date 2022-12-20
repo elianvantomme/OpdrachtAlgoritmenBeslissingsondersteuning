@@ -56,9 +56,11 @@ public class Cranes {
         boolean isPathFree = false;
         for (Crane crane: craneMap.values()) {
             //Move buiten het gebied
-            if(crane.isInTheWay(targetSlot, idealCrane, crane)){
-                return crane;
-            };
+            if(!crane.equals(idealCrane)){
+                if(crane.isInTheWay(targetSlot, idealCrane, crane)){
+                    return crane;
+                };
+            }
         }
         return null;
     }
