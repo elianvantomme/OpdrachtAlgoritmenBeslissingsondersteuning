@@ -24,6 +24,7 @@ public class Grid {
 
     public void generateLandScape() {
         for (Slot s : grid.values()) {
+            System.out.println("s = " + s);
             landScape[s.getX()][s.getY()] = s.getHeight();
         }
     }
@@ -107,6 +108,8 @@ public class Grid {
     private boolean isStackable(Container containerToMove, Slot targetSlot) {
         int[] row = landScape[targetSlot.getY()];
         int height = row[targetSlot.getX()];
+        if(leftOk(containerToMove, targetSlot, height)) System.out.println("left ok");
+        if(rightOk(containerToMove, targetSlot, height)) System.out.println("left ok");
         return leftOk(containerToMove, targetSlot, height) && rightOk(containerToMove, targetSlot, height);
     }
 
@@ -114,15 +117,18 @@ public class Grid {
         Slot targetSlot = getSlot(containerToMove.getTargetSlotId());
         //1 max height
         if (targetSlot.isMaxHeight(maxHeight)) {
+            System.out.println("slot is max height");
             return false;
         }
         //2 stacking constraint
         //2.1 container kan enkel gestacked worden op een even ondergrond (allemaal dezelfde hoogte)
         if (isCertainlyNotStackable(containerToMove, targetSlot)) {
+            System.out.println("is certainly not stackable");
             return false;
         }
         //2.2 container moet voldoen aan stacking voorwaarden ==> uteinden lopen parallel
         if (!isStackable(containerToMove, targetSlot)) {
+            System.out.println("is niet stackable");
             return false;
         }
         //als aan alle voorwaarden voldaan --> true returnen

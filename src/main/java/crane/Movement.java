@@ -41,17 +41,35 @@ public class Movement {
         crane.updateCrane(xTarget, yTarget);
         globalTime = endTime;
     }
-    public Movement(Slot initialSlot, Slot targetSlot, Crane crane){
-        this.initialSlot = initialSlot;
-        this.targetSlot = targetSlot;
-        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
-        this.yInitial = initialSlot.getY() + 0.5;
-        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
-        this.yTarget = targetSlot.getY() + 0.5;
+//    public Movement(Slot initialSlot, Slot targetSlot, Crane crane){
+//        this.initialSlot = initialSlot;
+//        this.targetSlot = targetSlot;
+//        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
+//        this.yInitial = initialSlot.getY() + 0.5;
+//        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
+//        this.yTarget = targetSlot.getY() + 0.5;
+//        this.startTime = globalTime;
+//        this.crane = crane;
+//        calculateTravelTimeOfMoveContainer();
+//        crane.updateCrane(xTarget, yTarget);
+//        globalTime = endTime;
+//    }
+
+    public Movement(Crane idealCrane, Crane blockingCrane, Slot targetSlot, Slot initialSlot) {
+        this.crane = blockingCrane;
+        this.xInitial = blockingCrane.getX();
+        this.yInitial = blockingCrane.getY();
+        this.yTarget = blockingCrane.getY();
         this.startTime = globalTime;
-        this.crane = crane;
-        calculateTravelTime();
-        crane.updateCrane(xTarget, yTarget);
+
+        if (idealCrane.getX() < blockingCrane.getX()){
+            this.xTarget = targetSlot.getX() + 2;
+        }else if(idealCrane.getX() > blockingCrane.getX()){
+            this.xTarget = targetSlot.getX() - 2;
+        }else{
+            throw new IllegalArgumentException();
+        }
+        calculateTravelTimeOfSafetyCrane();
         globalTime = endTime;
     }
 

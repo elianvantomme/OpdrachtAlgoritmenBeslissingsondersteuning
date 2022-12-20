@@ -129,6 +129,12 @@ public class Main {
         Cranes cranes = instance.getCranes();
 
         List<List<Container>> wrongContainers = containers.getWrongContainers(grid);
+        Container container = wrongContainers.get(0).get(0);
+        System.out.println("container test = " + container);
+        Slot targetSlot = grid.getSlot(container.getTargetSlotId());
+        System.out.println("targetSlot = " + targetSlot);
+        grid.printLandscape();
+        System.out.println(grid.checkTargetSlotViable(wrongContainers.get(0).get(0)));
 
         while(!isFinished(containers)){
             System.out.println("press enter to continue");
