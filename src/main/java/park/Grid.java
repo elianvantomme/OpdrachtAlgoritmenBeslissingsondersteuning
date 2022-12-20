@@ -37,7 +37,6 @@ public class Grid {
         return grid.get(slotId);
     }
 
-    //TODO dit klopt nog niet ==> denk nu opgelost
     public void update(Movement movement) {
         Slot initialSlot = movement.getInitialSlot();
         Slot targetSlot = movement.getTargetSlot();

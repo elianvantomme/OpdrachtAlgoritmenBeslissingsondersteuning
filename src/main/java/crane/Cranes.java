@@ -36,7 +36,6 @@ public class Cranes {
     }
 
     public List<Crane> findIdealCranes(Slot currentSlot, Slot targetSlot, Container container) {
-        //TODO check voor de tussenzone
         List<Crane> idealCranes = new ArrayList<>();
         for (Crane crane : craneMap.values()) {
             double pickupX = Util.calcContainerPickupX(container.getLength(), currentSlot.getX());
@@ -67,11 +66,10 @@ public class Cranes {
         boolean isPathFree = false;
         for (Crane crane : craneMap.values()) {
             //Move buiten het gebied
-            if (!crane.equals(idealCrane)) {
+            if (!(crane.getId() == idealCrane.getId())) {
                 if (crane.isInTheWay(targetSlot, idealCrane, crane)) {
                     return crane;
                 }
-                ;
             }
         }
         return null;

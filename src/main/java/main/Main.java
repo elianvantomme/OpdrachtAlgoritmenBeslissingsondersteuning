@@ -21,20 +21,11 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
     static Movements movements = new Movements();
 
-//    public static void moveContainer(Container container, Slot initialSlot, Slot destinationSlot,List<Crane> cranes, Map<Integer, Slot> grid){
-//        /*
-//        Gaan checken ofdat het mogelijk is om hem daar te plaatsen
-//            -   Geen enkele op een dubbele
-//            -   Niet overschrijdven van de max height
-//            -   Kraan moet er kunnen raken
-//        */
-//    }
-
-
-    public static void moveWithIdealContainer(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
+    public static void moveWithIdealCrane(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
         movements.addContainerMovement(movement, grid);
     }
+
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
         /*
         STAP 0: kijken als target slot mogelijk is!
@@ -54,13 +45,13 @@ public class Main {
             Crane idealCrane = idealCranes.get(0);
             Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
             if(blockingCrane == null){
-                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove, grid);
+                moveWithIdealCrane(initialSlot, targetSlot, idealCrane, containerToMove, grid);
             }
             else{
                 Movement movement = new Movement(idealCrane,blockingCrane, targetSlot);
                 //EMPTY MOVEMENT
                 movements.addEmptyMovement(movement);
-                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove, grid);
+                moveWithIdealCrane(initialSlot, targetSlot, idealCrane, containerToMove, grid);
             }
         }
         else{
@@ -108,12 +99,15 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
-        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
+//        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
+//        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
 //        File initialYardFile = new File("src/main/instances/terminal22_1_100_1_10.json");
 //        File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
 //        File initialYardFile = new File("src/main/instances/6t/Terminal_10_10_3_1_100.json");
 //        File targetYardFile = new File("src/main/instances/6t/targetTerminal_10_10_3_1_100.json");
+        File initialYardFile = new File("src/main/instances/instances1/5t/TerminalB_20_10_3_2_160.json");
+        File targetYardFile = new File("src/main/instances/instances1/5t/targetTerminalB_20_10_3_2_160.json");
+
         InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
         Instance instance = inputReader.getInstance();
         Containers containers = instance.getContainers();
@@ -126,6 +120,7 @@ public class Main {
             for(List<Container> stackWrongContainer : wrongContainers){
 //                System.out.println("press enter to continue");
 //                sc.nextLine();
+//                System.out.println(grid);
                 moveContainer(containers, grid ,cranes, stackWrongContainer);
 //                grid.update(movements.getLastMovement());
             }
