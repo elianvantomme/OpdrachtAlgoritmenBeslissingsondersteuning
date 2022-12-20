@@ -1,8 +1,9 @@
 package crane;
 
+import park.Grid;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Movements {
     private List<Movement> movementList;
@@ -12,9 +13,22 @@ public class Movements {
     }
     public void addMovement(Movement movement){
         movementList.add(movement);
+        grid.update(movement);
     }
+
+    public void addEmptyMovement(Movement movement){
+        System.out.println("\n"+movement +"\n");
+        movementList.add(movement);
+    }
+
     public Movement getLastMovement(){
         return movementList.get(movementList.size()-1);
     }
 
+    public void print(){
+        System.out.println("craneId,containerId,startTime,endTime,xPickup,yPickup,xDropOff,yDropOff");
+        for(Movement m : movementList){
+            System.out.println(m);
+        }
+    }
 }

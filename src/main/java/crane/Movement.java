@@ -18,8 +18,8 @@ public class Movement {
     private double yTarget;
     private Crane crane;
     //TODO wegen met de speed
-    private double xSpeed;
-    private double ySpeed;
+//    private double xSpeed;
+//    private double ySpeed;
     private double startTime;
     private double travelTimeWithContainer;
     private double endTime;
@@ -41,19 +41,6 @@ public class Movement {
         crane.updateCrane(xTarget, yTarget);
         globalTime = endTime;
     }
-//    public Movement(Slot initialSlot, Slot targetSlot, Crane crane){
-//        this.initialSlot = initialSlot;
-//        this.targetSlot = targetSlot;
-//        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
-//        this.yInitial = initialSlot.getY() + 0.5;
-//        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
-//        this.yTarget = targetSlot.getY() + 0.5;
-//        this.startTime = globalTime;
-//        this.crane = crane;
-//        calculateTravelTimeOfMoveContainer();
-//        crane.updateCrane(xTarget, yTarget);
-//        globalTime = endTime;
-//    }
 
     public Movement(Crane idealCrane, Crane blockingCrane, Slot targetSlot, Slot initialSlot) {
         this.crane = blockingCrane;
@@ -69,6 +56,7 @@ public class Movement {
         }else{
             throw new IllegalArgumentException();
         }
+        blockingCrane.updateCrane(xTarget, yTarget);
         calculateTravelTimeOfSafetyCrane();
         globalTime = endTime;
     }
@@ -90,10 +78,6 @@ public class Movement {
         double deltaY2 = Math.abs(yTarget - yInitial);
         travelTimeWithContainer = Math.max(deltaX2, deltaY2);
         endTime = startTime + travelTimeWithContainer;
-    }
-
-    public double getGlobalTime() {
-        return globalTime;
     }
 
     public Container getContainer() {

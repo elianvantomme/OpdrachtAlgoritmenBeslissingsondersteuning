@@ -28,19 +28,9 @@ public class Crane {
         this.ySpeed = ySpeed;
     }
 
-//    //an ideal crane can pick up and drop of a crane
-//    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
-//        if (xMin <= currentContainerX && currentContainerX <= xMax) {
-//                if (xMin <= targetSlotX && targetSlotX <= xMax) {
-//                    return true;
-//                }
-//        }
-//        return false;
-//    }
-
     //an ideal crane can pick up and drop of a crane
-    public boolean checkIdealCrane(int currentContainerX, int targetSlotX) {
-        return checkCraneCanPickUp(currentContainerX) && checkCraneCanDropOff(targetSlotX);
+    public boolean checkIdealCrane(double pickupX, double dropOffX) {
+        return checkCraneCanPickUp(pickupX) && checkCraneCanDropOff(dropOffX);
     }
 
     public boolean checkCraneCanPickUp(int currentContainerX){

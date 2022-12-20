@@ -1,8 +1,10 @@
 package park;
 
 import container.Container;
+import crane.Crane;
 import crane.Movement;
 import slot.Slot;
+import util.Util;
 
 import java.util.*;
 
@@ -11,14 +13,12 @@ public class Grid {
     private int maxHeight;
     private int length;
     private int width;
-    private int[][] landScape;
 
     public Grid(Map<Integer, Slot> grid, int maxHeight, int length, int width) {
         this.grid = grid;
         this.maxHeight = maxHeight;
         this.length = length;
         this.width = width;
-        landScape = new int[length][width];
     }
 
     public void putContainerOnSlot(Container container, int slotId) {
@@ -27,17 +27,24 @@ public class Grid {
         }
     }
 
+    public void removeContainerFromSlot(Container container, int slotId){
+        for (int i = slotId; i <= slotId + container.getLength() - 1; i++) {
+            grid.get(i).popContainer();
+        }
+    }
+
     public Slot getSlot(int slotId) {
         return grid.get(slotId);
     }
 
-    //TODO dit klopt nog niet
+    //TODO dit klopt nog niet ==> denk nu opgelost
     public void update(Movement movement) {
         Slot initialSlot = movement.getInitialSlot();
         Slot targetSlot = movement.getTargetSlot();
-        Container movedContainer = initialSlot.popContainer();
+        Container movedContainer = movement.getContainer();
         movedContainer.update(targetSlot.getId());
-        targetSlot.putContainer(movedContainer);
+        removeContainerFromSlot(movedContainer, initialSlot.getId());
+        putContainerOnSlot(movedContainer, targetSlot.getId());
     }
 
     public boolean isFlatSurface(Container containerToMove, Slot targetSlot) {
@@ -85,6 +92,29 @@ public class Grid {
         }
         System.out.println("stackable ==> container: " + containerToMove + " targetslot: " + targetSlot);
         return true;
+    }
+
+    public Slot findViableSlot(int[] interval, Container containerToMove, Crane pickupCrane, Crane dropOffCrane) {
+        for(Slot slot : grid.values()){
+            //TODO is dit juist
+            if(interval[0] <= slot.getX() && slot.getX() <= interval[1]){
+                if(!checkTargetSlotViable(containerToMove, slot)){
+                    continue;
+                }
+                if(!pickupCrane.checkCraneCanPickUp(Util.calcContainerPickupX(containerToMove.getLength(), slot.getX()))){
+                    continue;
+                }
+                if(!dropOffCrane.checkCraneCanPickUp(Util.calcContainerPickupX(containerToMove.getLength(), slot.getX()))){
+                    continue;
+                }
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    public double calcContainerPickupX(int containerLength, int slotX){
+        return slotX + (double) containerLength/2;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Main {
 //    }
 
 
-    public static void moveWithIdealContainer(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove){
+    public static void moveWithIdealContainer(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
         System.out.println("\n"+movement +"\n");
         movements.addMovement(movement);
@@ -41,10 +41,9 @@ public class Main {
         /*
         STAP 0: kijken als target slot mogelijk is!
          */
-        if(grid.checkTargetSlotViable(containerToMove)){
-
+        if(!grid.checkTargetSlotViable(containerToMove, grid.getSlot(containerToMove.getTargetSlotId()))){
+            return; // als je de container daar niet kan zetten
         }
-
 
         /*
         STAP 1: kijken voor usable kraan
@@ -56,22 +55,31 @@ public class Main {
         List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot);
         if(!idealCranes.isEmpty()){
             Crane idealCrane = idealCranes.get(0);
-
-            Crane blockingCrane = cranes.isPathFree(targetSlot, initialSlot, idealCrane, containerToMove);
+            Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
             if(blockingCrane == null){
-                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove);
+                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove, grid);
             }
             else{
-                Movement movement = new Movement(idealCrane,blockingCrane, targetSlot, initialSlot);
-                movements.addMovement(movement);
-                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove);
+                Movement movement = new Movement(idealCrane,blockingCrane, targetSlot);
+                //EMPTY MOVEMENT
+                movements.addEmptyMovement(movement);
+                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove, grid);
             }
         }
         else{
             List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot);
             Crane pickupCrane = nonIdealCranes.get(0);
             Crane dropOffCrane = nonIdealCranes.get(1);
+            Slot viableSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
+            Movement placeTempMovement = new Movement(initialSlot, viableSlot,pickupCrane,containerToMove);
+            movements.addContainerMovement(placeTempMovement,grid);
 
+            //TODO check of het pad vrij is
+            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, viableSlot);
+            movements.addEmptyMovement(emptyMovement);
+
+            Movement pickTempMovement = new Movement(viableSlot, targetSlot, dropOffCrane, containerToMove);
+            movements.addContainerMovement(pickTempMovement, grid);
             //move with ideal crane van
         }
 
@@ -84,16 +92,6 @@ public class Main {
         /*
         STAP 2: Move kraan naar de locatie
          */
-
-
-
-        /*
-        STAP 3: Checken of de destination vrij is en kan geplaatst worden:
-            - Top down gaan plaatsen
-            - Max Height niet overschreden
-            - Even ondergrond
-         */
-
 
     }
 
@@ -118,10 +116,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
+        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
+        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
 //        File initialYardFile = new File("src/main/instances/terminal22_1_100_1_10.json");
 //        File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
-        File initialYardFile = new File("src/main/instances/6t/Terminal_10_10_3_1_100.json");
-        File targetYardFile = new File("src/main/instances/6t/targetTerminal_10_10_3_1_100.json");
+//        File initialYardFile = new File("src/main/instances/6t/Terminal_10_10_3_1_100.json");
+//        File targetYardFile = new File("src/main/instances/6t/targetTerminal_10_10_3_1_100.json");
         InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
         Instance instance = inputReader.getInstance();
         Containers containers = instance.getContainers();
@@ -130,14 +130,15 @@ public class Main {
 
         List<List<Container>> wrongContainers;
         while(!isFinished(containers)){
-            System.out.println("press enter to continue");
-            sc.nextLine();
             wrongContainers = containers.getWrongContainers(grid);
             for(List<Container> stackWrongContainer : wrongContainers){
+//                System.out.println("press enter to continue");
+//                sc.nextLine();
                 moveContainer(containers, grid ,cranes, stackWrongContainer);
-                grid.update(movements.getLastMovement());
+//                grid.update(movements.getLastMovement());
             }
         }
-
+        System.out.println("final movements");
+        movements.print();
     }
 }
