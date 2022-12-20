@@ -2,6 +2,7 @@ package slot;
 
 import container.Container;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class Slot {
@@ -27,6 +28,10 @@ public class Slot {
 
     public Container getContainerAtHeight(int height){
         return containerStack.get(height-1);
+    }
+
+    public Container getTopContainer(){
+        return containerStack.peek();
     }
 
     public Container popContainer(){

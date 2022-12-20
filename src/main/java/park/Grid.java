@@ -4,7 +4,7 @@ import container.Container;
 import crane.Movement;
 import slot.Slot;
 
-import java.util.Map;
+import java.util.*;
 
 public class Grid {
     private Map<Integer, Slot> grid;
@@ -19,130 +19,72 @@ public class Grid {
         this.length = length;
         this.width = width;
         landScape = new int[length][width];
-//        generateLandScape();
-    }
-
-    public void generateLandScape() {
-        for (Slot s : grid.values()) {
-            System.out.println("s = " + s);
-            landScape[s.getX()][s.getY()] = s.getHeight();
-        }
     }
 
     public void putContainerOnSlot(Container container, int slotId) {
-        for(int i = slotId ; i<container.getLength()-1; i++){
+        for (int i = slotId; i <= slotId + container.getLength() - 1; i++) {
             grid.get(i).putContainer(container);
         }
-//        generateLandScape();
     }
 
     public Slot getSlot(int slotId) {
         return grid.get(slotId);
     }
 
+    //TODO dit klopt nog niet
     public void update(Movement movement) {
         Slot initialSlot = movement.getInitialSlot();
         Slot targetSlot = movement.getTargetSlot();
         Container movedContainer = initialSlot.popContainer();
         movedContainer.update(targetSlot.getId());
         targetSlot.putContainer(movedContainer);
-        generateLandScape();
     }
 
-    private boolean isCertainlyNotStackable(Container containerToMove, Slot targetSlot) {
-        /*
-        when the values along the lenght of the container are not the same
-        then it's certainly not possible to put the container there, else it could be possible
-         */
-        int[] row = landScape[targetSlot.getY()];
-        int height = row[targetSlot.getX()];
-        //TODO kleiner of gelijk aan weet ik niet zo goed
-        for (int i = targetSlot.getX() + 1; i <= containerToMove.getLength(); i++) {
-            if (row[i] != height) return true;
+    public boolean isFlatSurface(Container containerToMove, Slot targetSlot) {
+        int height = targetSlot.getHeight();
+        for (int i = targetSlot.getId() + 1; i < targetSlot.getId() + containerToMove.getLength(); i++) {
+            if (getSlot(i).getHeight() != height) return false;
         }
-        return false;
+        return true;
     }
 
-    private boolean leftOk(Container containerToMove, Slot targetSlot, int height){
-        Slot currentSlot = targetSlot;
-        int currentSlotId = targetSlot.getId();
-        int maxLength = 0;
-        //TODO left zou oke moeten zijn heb gecontroleerd op papier
-        //left side
-        boolean leftOk = false;
-        while (getSlot(currentSlotId).getX() > 0) {
-            currentSlotId--;
-            currentSlot = getSlot(currentSlotId);
-            maxLength++;
-            if (currentSlot.getHeight() == height) {
-                Container container = currentSlot.getContainerAtHeight(height);
-                if (container.getLength() == maxLength) {
-                    leftOk = true;
-                    break;
+    public boolean isStackable(Container containerToMove, Slot targetSlot) {
+        int height = targetSlot.getHeight();
+        if (height > 0) {
+            int lengthBelow = 0;
+            List<Integer> usedContainers = new ArrayList<>();
+            for (int i = targetSlot.getId(); i < targetSlot.getId() + containerToMove.getLength(); i++) {
+                Container topContainer = getSlot(i).getTopContainer();
+                if (!usedContainers.contains(topContainer.getId())) {
+                    usedContainers.add(topContainer.getId());
+                    lengthBelow += topContainer.getLength();
                 }
             }
+            return containerToMove.getLength() == lengthBelow;
         }
-        return leftOk;
-    }
-
-    private boolean rightOk(Container containerToMove, Slot targetSlot, int height){
-        //right side
-        //TODO zou ook juist moeten zijn gecontroleerd op papier
-        boolean rightOk = true;
-        int currentSlotId = targetSlot.getId();
-        Slot currentSlot = getSlot(currentSlotId);
-        int maxLength = containerToMove.getLength();
-        for (int i = currentSlotId; i < currentSlotId+containerToMove.getLength(); i++) {
-            currentSlot = getSlot(currentSlotId);
-            if(currentSlot.getHeight() == height){
-                Container container = currentSlot.getContainerAtHeight(height);
-                if(container.getLength() > maxLength){
-                    rightOk = false;
-                    break;
-                }else{
-                    maxLength--;
-                }
-            }
-        }
-        return rightOk;
-    }
-
-    private boolean isStackable(Container containerToMove, Slot targetSlot) {
-        int[] row = landScape[targetSlot.getY()];
-        int height = row[targetSlot.getX()];
-        if(leftOk(containerToMove, targetSlot, height)) System.out.println("left ok");
-        if(rightOk(containerToMove, targetSlot, height)) System.out.println("left ok");
-        return leftOk(containerToMove, targetSlot, height) && rightOk(containerToMove, targetSlot, height);
+        return true;
     }
 
     public boolean checkTargetSlotViable(Container containerToMove) {
         Slot targetSlot = getSlot(containerToMove.getTargetSlotId());
         //1 max height
         if (targetSlot.isMaxHeight(maxHeight)) {
-            System.out.println("slot is max height");
+            System.out.println("slot is max height ==> targetSlot:" + targetSlot);
             return false;
         }
         //2 stacking constraint
-        //2.1 container kan enkel gestacked worden op een even ondergrond (allemaal dezelfde hoogte)
-        if (isCertainlyNotStackable(containerToMove, targetSlot)) {
-            System.out.println("is certainly not stackable");
+        //2.1 is flat surface
+        if (!isFlatSurface(containerToMove, targetSlot)) {
+            System.out.println("geen flat surface ==> container: " + containerToMove + " targetslot: " + targetSlot);
             return false;
         }
-        //2.2 container moet voldoen aan stacking voorwaarden ==> uteinden lopen parallel
+        //2.2 voldoet aan stacking constraint
         if (!isStackable(containerToMove, targetSlot)) {
-            System.out.println("is niet stackable");
+            System.out.println("niet stackable ==> container: " + containerToMove + " targetslot: " + targetSlot);
             return false;
         }
-        //als aan alle voorwaarden voldaan --> true returnen
+        System.out.println("stackable ==> container: " + containerToMove + " targetslot: " + targetSlot);
         return true;
-    }
-
-    public void printLandscape() {
-        for (int r = 0; r < landScape.length; r++) {
-            for (int c = 0; c < landScape[r].length; c++)
-                System.out.print(landScape[r][c] + " ");
-            System.out.println();
-        }
     }
 
     @Override
