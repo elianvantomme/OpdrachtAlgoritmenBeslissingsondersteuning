@@ -88,6 +88,14 @@ public class Crane {
         return xMin;
     }
 
+    public double getLocalTime() {
+        return localTime;
+    }
+
+    public void setLocalTime(double localTime) {
+        this.localTime = localTime;
+    }
+
     public void updateCrane(double xTarget, double yTarget) {
         this.x = xTarget;
         this.y = yTarget;

@@ -37,13 +37,13 @@ public class Movement {
         this.xTarget = Util.calcContainerPickupX(container.getLength(), targetSlot.getX());
         this.yTarget = targetSlot.getY() + 0.5;
 
-        this.startTime = globalTime;
+        this.startTime = crane.getLocalTime();
         this.crane = crane;
         this.container = container;
         this.containerId = container.getId();
         calculateTravelTimeOfMoveContainer();
         crane.updateCrane(xTarget, yTarget);
-        globalTime = endTime;
+        crane.setLocalTime(endTime);
     }
 
     public Movement(Crane idealCrane, Crane blockingCrane, Slot targetSlot) {
@@ -52,7 +52,7 @@ public class Movement {
         this.xInitial = blockingCrane.getX();
         this.yInitial = blockingCrane.getY();
         this.yTarget = blockingCrane.getY();
-        this.startTime = globalTime;
+        this.startTime = crane.getLocalTime();
         this.containerId = -1;
         if (idealCrane.getX() < blockingCrane.getX()){
             this.xTarget = targetSlot.getX() + 2;
@@ -70,7 +70,7 @@ public class Movement {
         double deltaX = Math.abs(xInitial- crane.getX());
         double deltaY = Math.abs(yInitial - crane.getY());
         travelTimeEmpty = Math.max(deltaX, deltaY);
-        startTime = globalTime + travelTimeEmpty;
+        startTime = crane.getLocalTime() + travelTimeEmpty;
 
         double deltaX2 = Math.abs(xTarget- xInitial);
         double deltaY2 = Math.abs(yTarget - yInitial);
@@ -95,6 +95,10 @@ public class Movement {
 
     public Slot getTargetSlot() {
         return targetSlot;
+    }
+
+    public static void setGlobalTime(double globalTime) {
+        Movement.globalTime = globalTime;
     }
 
     @Override
