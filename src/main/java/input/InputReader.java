@@ -20,11 +20,9 @@ import java.util.*;
 
 public class InputReader {
     private JSONObject initialYardJsonObject;
-    private JSONObject targetYardJsonObject;
 
-    public InputReader(File initialYardFile, File targetYardFile) throws IOException, ParseException {
+    public InputReader(File initialYardFile) throws IOException, ParseException {
         initialYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(initialYardFile));
-        targetYardJsonObject = (JSONObject) new JSONParser().parse(new FileReader(targetYardFile));
     }
 
     public Grid makeGrid() {
@@ -43,7 +41,8 @@ public class InputReader {
         int maxHeight = (int) (long) initialYardJsonObject.get("maxheight");
         int length = (int) (long) initialYardJsonObject.get("length");
         int width = (int) (long) initialYardJsonObject.get("width");
-        Grid grid = new Grid(gridMap, maxHeight, length, width);
+        int targetHeight = (int) (long) initialYardJsonObject.get("targetHeight");
+        Grid grid = new Grid(gridMap, maxHeight, length, width, targetHeight);
         return grid;
     }
 
@@ -69,13 +68,6 @@ public class InputReader {
         }
 
         Containers containers = new Containers(containerMap);
-
-        JSONArray targetAssignments = (JSONArray) targetYardJsonObject.get("assignments");
-        itr = targetAssignments.iterator();
-        while (itr.hasNext()) {
-            JSONObject j = itr.next();
-            containers.setTargetSlotId((int)(long) j.get("container_id"), (int)(long) j.get("slot_id"));
-        }
 
         return containers;
     }

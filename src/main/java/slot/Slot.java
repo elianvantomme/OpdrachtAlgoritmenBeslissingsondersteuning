@@ -22,6 +22,10 @@ public class Slot {
         return containerStack.size() == maxHeight;
     }
 
+    public boolean isAboveHeight(int height){
+        return containerStack.size() > height;
+    }
+
     public int getHeight(){
         return containerStack.size();
     }

@@ -11,14 +11,16 @@ import java.util.*;
 public class Grid {
     private Map<Integer, Slot> grid;
     private int maxHeight;
+    private int targetHeight;
     private int length;
     private int width;
 
-    public Grid(Map<Integer, Slot> grid, int maxHeight, int length, int width) {
+    public Grid(Map<Integer, Slot> grid, int maxHeight, int length, int width, int targetHeight) {
         this.grid = grid;
         this.maxHeight = maxHeight;
         this.length = length;
         this.width = width;
+        this.targetHeight = targetHeight;
     }
 
     public void putContainerOnSlot(Container container, int slotId) {
@@ -109,6 +111,16 @@ public class Grid {
             }
         }
         return null;
+    }
+
+    public List<Container> getWrongContainers() {
+        List<Container> wrongContainers = new ArrayList<>();
+        for(Slot s : grid.values()){
+            if(s.isAboveHeight(targetHeight)){
+                wrongContainers.add(s.getTopContainer());
+            }
+        }
+        return wrongContainers;
     }
 
     public double calcContainerPickupX(int containerLength, int slotX){
