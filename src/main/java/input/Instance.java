@@ -1,15 +1,10 @@
 package input;
 
-import container.Container;
 import container.Containers;
-import crane.Crane;
 import crane.Cranes;
-import park.Grid;
-import park.TargetYard;
-import park.Yard;
-import slot.Slot;
-
-import java.util.Map;
+import grid.Grid;
+import grid.TargetYard;
+import grid.Yard;
 
 public class Instance {
     private Grid grid;

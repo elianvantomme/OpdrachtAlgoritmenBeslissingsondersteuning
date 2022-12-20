@@ -8,9 +8,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import park.Grid;
-import park.TargetYard;
-import park.Yard;
+import grid.Grid;
+import grid.TargetYard;
+import grid.Yard;
 import slot.Slot;
 
 import java.io.File;

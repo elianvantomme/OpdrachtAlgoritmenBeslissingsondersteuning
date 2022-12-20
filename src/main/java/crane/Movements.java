@@ -1,6 +1,6 @@
 package crane;
 
-import park.Grid;
+import grid.Grid;
 
 import java.util.ArrayList;
 import java.util.List;

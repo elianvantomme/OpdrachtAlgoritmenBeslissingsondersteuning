@@ -1,6 +1,6 @@
 package container;
 
-import park.Grid;
+import grid.Grid;
 import slot.Slot;
 
 import java.util.*;

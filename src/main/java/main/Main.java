@@ -9,7 +9,7 @@ import crane.Movements;
 import input.InputReader;
 import input.Instance;
 import org.json.simple.parser.ParseException;
-import park.Grid;
+import grid.Grid;
 import slot.Slot;
 
 import java.io.File;
