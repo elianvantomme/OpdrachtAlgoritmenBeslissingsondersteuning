@@ -118,6 +118,13 @@ public class Main {
         while(!isFinished(containers)){
             wrongContainers = containers.getWrongContainers(grid);
             for(List<Container> stackWrongContainer : wrongContainers){
+                /*
+                TODO checken voor welke kraan
+                Kijken of het volledige pad binnen de zone van 1 kraan blijft zo ja voegen we deze container ook toe
+                aan de sublijst van de kraan. Een kraan voert alles uit tot het moment dat er een movement van beide
+                nodig is.
+                 */
+
 //                System.out.println("press enter to continue");
 //                sc.nextLine();
 //                System.out.println(grid);
