@@ -21,23 +21,25 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
     static Movements movements = new Movements();
 
-    public static void movementOfContainerInZone(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
+    public static void moveOfContainerWithCrane(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
         movements.addContainerMovement(movement, grid);
     }
 
     public static void moveInZone(Grid grid, Cranes cranes, Slot targetSlot, Slot initialSlot, Container containerToMove, Crane idealCrane) {
+        /*
+        TODO de tijd gaan synchroniseren wanner er een overlap is
+        De global tijd moet gelijk gesteld worden met de MAX(tijd van de kranen)
+         */
         Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
         if (blockingCrane == null){
-            movementOfContainerInZone(initialSlot, targetSlot, idealCrane, containerToMove,grid);
-            Movement movement = new Movement(initialSlot, targetSlot, idealCrane, containerToMove);
-            movements.addContainerMovement(movement, grid);
+            moveOfContainerWithCrane(initialSlot, targetSlot, idealCrane, containerToMove,grid);
         } else {
             //EMPTY MOVEMENT
             Movement movement = new Movement(idealCrane, blockingCrane, targetSlot);
             movements.addEmptyMovement(movement);
 
-            movementOfContainerInZone(initialSlot, targetSlot, idealCrane, containerToMove,grid);
+            moveOfContainerWithCrane(initialSlot, targetSlot, idealCrane, containerToMove,grid);
         }
     }
 
@@ -66,16 +68,17 @@ public class Main {
             List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
             Crane pickupCrane = nonIdealCranes.get(0);
             Crane dropOffCrane = nonIdealCranes.get(1);
+            Movement.setGlobalTime(Math.max(pickupCrane.getLocalTime(), dropOffCrane.getLocalTime()));
+
             Slot viableSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
-            Movement placeTempMovement = new Movement(initialSlot, viableSlot, pickupCrane, containerToMove);
-            movements.addContainerMovement(placeTempMovement, grid);
+
+            moveOfContainerWithCrane(initialSlot, viableSlot, pickupCrane, containerToMove, grid);
 
             //TODO check of het pad vrij is
             Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, viableSlot);
             movements.addEmptyMovement(emptyMovement);
 
-            Movement pickTempMovement = new Movement(viableSlot, targetSlot, dropOffCrane, containerToMove);
-            movements.addContainerMovement(pickTempMovement, grid);
+            moveOfContainerWithCrane(viableSlot, targetSlot, dropOffCrane, containerToMove, grid);
             //move with ideal crane van
         }
 
@@ -90,20 +93,25 @@ public class Main {
 
     }
 
-    public static void moveContainer(Containers containers, Grid grid, Cranes cranes, List<Container> wrongContainers) {
-        Container containerToMove = wrongContainers.get(0);
-        // aparte methoden als er wel of niet containers bovenop staan die we moeten eerst verplaatsen
+    public static void moveContainer(Grid grid, Cranes cranes, Container containerToMove) {
+        /*
+        Aparte methoden als er wel of niet containers bovenop staan die we moeten eerst verplaatsen
+         */
+        moveSingleWrongContainer(containerToMove, grid, cranes);
+
+        /*
         if (wrongContainers.size() == 1) {
             moveSingleWrongContainer(containerToMove, grid, cranes);
         }
-        /*
         Else is not used because there are no instances where a container (which is already at its target place) needs
         to be moved to make way to a container below to be placed elsewhere.
-        */
+
         else {
-//            moveStackOfContainers(containers, grid ,cranes, wrongContainers);
-//            moveSingleWrongContainer(containerToMove, grid ,cranes, wrongContainers);
+            moveStackOfContainers(containers, grid ,cranes, wrongContainers);
+            moveSingleWrongContainer(containerToMove, grid ,cranes, wrongContainers);
         }
+        */
+
     }
 
 
@@ -147,29 +155,44 @@ public class Main {
                 Slot initialSlot = grid.getSlot(containerToMove.getSlotId());
                 Slot targetSlot = grid.getSlot(containerToMove.getTargetSlotId());
 
-                Crane idealCrane = cranes.findIdealCranes(initialSlot, targetSlot, containerToMove).get(0);
-                if (idealCrane.equals(usableCranes.get(0))){
-                    containersInCrane1.add(containerToMove);
+                List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot, containerToMove);
+                if(!idealCranes.isEmpty()) {
+                    Crane idealCrane = idealCranes.get(0);
+                    if (idealCrane.equals(usableCranes.get(0))) {
+                        containersInCrane1.add(containerToMove);
+                    } else {
+                        containersInCrane2.add(containerToMove);
+                    }
                 }
-                else if(idealCrane.equals(usableCranes.get(1))){
-                    containersInCrane2.add(containerToMove);
-                }
-                else{
+                else {
                     containersBetweenCranes.add(containerToMove);
                     break;
                 }
-
 //                System.out.println("press enter to continue");
 //                sc.nextLine();
 //                System.out.println(grid);
-                    moveContainer(containers, grid, cranes, stackWrongContainer);
+//                moveContainer(containers, grid, cranes, stackWrongContainer);
 //                grid.update(movements.getLastMovement());
             }
-            for (Container container:containersInCrane1) {
-                moveContainer(containers, grid, cranes, stackWrongContainer);
+            Iterator<Container> iteratorCont1 = containersInCrane1.iterator();
+            while(iteratorCont1.hasNext()){
+                Container container = iteratorCont1.next();
+                moveContainer(grid,cranes,container);
+                iteratorCont1.remove();
             }
-            for (int i = 0; i < containersInCrane1.size(); i++) {
 
+            Iterator<Container> iteratorCont2 = containersInCrane2.iterator();
+            while(iteratorCont2.hasNext()){
+                Container container = iteratorCont2.next();
+                moveContainer(grid,cranes,container);
+                iteratorCont2.remove();
+            }
+
+            Iterator<Container> iteratorBetween = containersBetweenCranes.iterator();
+            while(iteratorBetween.hasNext()){
+                Container container = iteratorBetween.next();
+                moveContainer(grid,cranes,container);
+                iteratorBetween.remove();
             }
         }
         System.out.println("final movements");
