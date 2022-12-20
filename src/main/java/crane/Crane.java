@@ -15,6 +15,7 @@ public class Crane {
     private int xSpeed;
     private int ySpeed;
     private boolean holdingContainer;
+    private double localTime;
 
     public Crane(int id, double x, double y, int xMin, int xMax, int yMin, int yMax, int xSpeed, int ySpeed) {
         this.id = id;
@@ -26,6 +27,7 @@ public class Crane {
         this.yMax = yMax;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
+        this.localTime = 0;
     }
 
     //an ideal crane can pick up and drop of a crane
