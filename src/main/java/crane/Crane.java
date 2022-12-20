@@ -33,12 +33,12 @@ public class Crane {
         return checkCraneCanPickUp(pickupX) && checkCraneCanDropOff(dropOffX);
     }
 
-    public boolean checkCraneCanPickUp(int currentContainerX){
-        return xMin <= currentContainerX && currentContainerX <= xMax;
+    public boolean checkCraneCanPickUp(double pickupX){
+        return xMin <= pickupX && pickupX <= xMax;
     }
 
-    public boolean checkCraneCanDropOff(int targetSlotX){
-        return xMin <= targetSlotX && targetSlotX <= xMax;
+    public boolean checkCraneCanDropOff(double dropOffX){
+        return xMin <= dropOffX && dropOffX <= xMax;
     }
 
 

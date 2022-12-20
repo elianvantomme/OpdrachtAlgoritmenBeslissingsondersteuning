@@ -2,6 +2,7 @@ package crane;
 
 import container.Container;
 import slot.Slot;
+import util.Util;
 
 public class Movement {
     /*
@@ -29,10 +30,13 @@ public class Movement {
     public Movement(Slot initialSlot, Slot targetSlot, Crane crane, Container container){
         this.initialSlot = initialSlot;
         this.targetSlot = targetSlot;
-        this.xInitial = initialSlot.getX() + (double) container.getLength() / 2;
+
+        this.xInitial = Util.calcContainerPickupX(container.getLength(), initialSlot.getX());
         this.yInitial = initialSlot.getY() + 0.5;
-        this.xTarget = targetSlot.getX() + (double) container.getLength() / 2;
+
+        this.xTarget = Util.calcContainerPickupX(container.getLength(), targetSlot.getX());
         this.yTarget = targetSlot.getY() + 0.5;
+
         this.startTime = globalTime;
         this.crane = crane;
         this.container = container;
@@ -42,13 +46,14 @@ public class Movement {
         globalTime = endTime;
     }
 
-    public Movement(Crane idealCrane, Crane blockingCrane, Slot targetSlot, Slot initialSlot) {
+    public Movement(Crane idealCrane, Crane blockingCrane, Slot targetSlot) {
+        this.targetSlot = targetSlot;
         this.crane = blockingCrane;
         this.xInitial = blockingCrane.getX();
         this.yInitial = blockingCrane.getY();
         this.yTarget = blockingCrane.getY();
         this.startTime = globalTime;
-
+        this.containerId = -1;
         if (idealCrane.getX() < blockingCrane.getX()){
             this.xTarget = targetSlot.getX() + 2;
         }else if(idealCrane.getX() > blockingCrane.getX()){
@@ -95,12 +100,12 @@ public class Movement {
     @Override
     public String toString() {
         return crane.getId()+
-                ";"+containerId+
-                ";"+startTime+
-                ";"+endTime+
-                ";"+xInitial+
-                ";"+yInitial+
-                ";"+xTarget+
-                ";"+yTarget;
+                ","+containerId+
+                ","+startTime+
+                ","+endTime+
+                ","+xInitial+
+                ","+yInitial+
+                ","+xTarget+
+                ","+yTarget;
     }
 }

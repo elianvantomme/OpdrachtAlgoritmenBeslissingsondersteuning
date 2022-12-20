@@ -33,10 +33,8 @@ public class Main {
 
     public static void moveWithIdealContainer(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
-        System.out.println("\n"+movement +"\n");
-        movements.addMovement(movement);
+        movements.addContainerMovement(movement, grid);
     }
-
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
         /*
         STAP 0: kijken als target slot mogelijk is!
@@ -48,11 +46,10 @@ public class Main {
         /*
         STAP 1: kijken voor usable kraan
          */
-
         Slot initialSlot = grid.getSlot(containerToMove.getSlotId());
         Slot targetSlot = grid.getSlot(containerToMove.getTargetSlotId());
 
-        List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot);
+        List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot,containerToMove);
         if(!idealCranes.isEmpty()){
             Crane idealCrane = idealCranes.get(0);
             Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
@@ -67,7 +64,7 @@ public class Main {
             }
         }
         else{
-            List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot);
+            List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
             Crane pickupCrane = nonIdealCranes.get(0);
             Crane dropOffCrane = nonIdealCranes.get(1);
             Slot viableSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
@@ -82,11 +79,6 @@ public class Main {
             movements.addContainerMovement(pickTempMovement, grid);
             //move with ideal crane van
         }
-
-
-        /*
-        STAP 1.5: Is het pad vrij
-         */
 
 
         /*

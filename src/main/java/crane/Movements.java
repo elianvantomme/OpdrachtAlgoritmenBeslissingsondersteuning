@@ -11,7 +11,8 @@ public class Movements {
     public Movements(){
         movementList = new ArrayList<>();
     }
-    public void addMovement(Movement movement){
+    public void addContainerMovement(Movement movement, Grid grid){
+        System.out.println("\n"+movement +"\n");
         movementList.add(movement);
         grid.update(movement);
     }

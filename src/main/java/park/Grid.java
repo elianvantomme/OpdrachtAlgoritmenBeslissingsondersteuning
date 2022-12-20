@@ -72,8 +72,7 @@ public class Grid {
         return true;
     }
 
-    public boolean checkTargetSlotViable(Container containerToMove) {
-        Slot targetSlot = getSlot(containerToMove.getTargetSlotId());
+    public boolean checkTargetSlotViable(Container containerToMove, Slot targetSlot) {
         //1 max height
         if (targetSlot.isMaxHeight(maxHeight)) {
             System.out.println("slot is max height ==> targetSlot:" + targetSlot);

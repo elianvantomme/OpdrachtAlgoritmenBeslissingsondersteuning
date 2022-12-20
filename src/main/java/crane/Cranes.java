@@ -52,6 +52,8 @@ public class Cranes {
         List<Crane> nonIdealCranes = new ArrayList<>();
         Crane pickupCrane = null;
         Crane dropOffCrane = null;
+        double pickupX = Util.calcContainerPickupX(container.getLength(), currentSlot.getX());
+        double dropOffX = Util.calcContainerPickupX(container.getLength(), targetSlot.getX());
         for (Crane crane : craneMap.values()) {
             if (crane.checkCraneCanPickUp(pickupX)) pickupCrane = crane;
             if (crane.checkCraneCanDropOff(dropOffX)) dropOffCrane = crane;
@@ -61,7 +63,7 @@ public class Cranes {
         return nonIdealCranes;
     }
 
-    public Crane isPathFree(Slot targetSlot, Slot initialSlot, Crane idealCrane, Container containerToMove) {
+    public Crane isPathFree(Slot targetSlot, Crane idealCrane) {
         boolean isPathFree = false;
         for (Crane crane : craneMap.values()) {
             //Move buiten het gebied
