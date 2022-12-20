@@ -56,9 +56,9 @@ public class Movement {
         this.startTime = globalTime;
         this.containerId = -1;
         if (idealCrane.getX() < blockingCrane.getX()){
-            this.xTarget = targetSlot.getX() + 2;
+            this.xTarget = blockingCrane.getX() + 2;
         }else if(idealCrane.getX() > blockingCrane.getX()){
-            this.xTarget = targetSlot.getX() - 2;
+            this.xTarget = blockingCrane.getX() - 2;
         }else{
             throw new IllegalArgumentException();
         }
