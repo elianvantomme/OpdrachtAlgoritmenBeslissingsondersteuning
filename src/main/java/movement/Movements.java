@@ -1,4 +1,4 @@
-package crane;
+package movement;
 
 import grid.Grid;
 

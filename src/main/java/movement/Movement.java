@@ -1,6 +1,7 @@
-package crane;
+package movement;
 
 import container.Container;
+import crane.Crane;
 import slot.Slot;
 import util.Util;
 
