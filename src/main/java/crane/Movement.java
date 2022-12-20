@@ -9,6 +9,7 @@ public class Movement {
     y = yslot + 1/2
     */
     private Container container;
+    private int containerId;
     private Slot initialSlot;
     private Slot targetSlot;
     private double xInitial;
@@ -35,7 +36,8 @@ public class Movement {
         this.startTime = globalTime;
         this.crane = crane;
         this.container = container;
-        calculateTravelTime();
+        this.containerId = container.getId();
+        calculateTravelTimeOfMoveContainer();
         crane.updateCrane(xTarget, yTarget);
         globalTime = endTime;
     }
@@ -53,12 +55,19 @@ public class Movement {
         globalTime = endTime;
     }
 
-    private void calculateTravelTime(){
+    private void calculateTravelTimeOfMoveContainer(){
         double deltaX = Math.abs(xInitial- crane.getX());
         double deltaY = Math.abs(yInitial - crane.getY());
         travelTimeEmpty = Math.max(deltaX, deltaY);
         startTime = globalTime + travelTimeEmpty;
 
+        double deltaX2 = Math.abs(xTarget- xInitial);
+        double deltaY2 = Math.abs(yTarget - yInitial);
+        travelTimeWithContainer = Math.max(deltaX2, deltaY2);
+        endTime = startTime + travelTimeWithContainer;
+    }
+
+    private void calculateTravelTimeOfSafetyCrane(){
         double deltaX2 = Math.abs(xTarget- xInitial);
         double deltaY2 = Math.abs(yTarget - yInitial);
         travelTimeWithContainer = Math.max(deltaX2, deltaY2);
@@ -84,7 +93,7 @@ public class Movement {
     @Override
     public String toString() {
         return crane.getId()+
-                ";"+container.getId()+
+                ";"+containerId+
                 ";"+startTime+
                 ";"+endTime+
                 ";"+xInitial+

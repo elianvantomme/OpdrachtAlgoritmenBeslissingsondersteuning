@@ -57,12 +57,14 @@ public class Main {
         if(!idealCranes.isEmpty()){
             Crane idealCrane = idealCranes.get(0);
 
-            cranes.isPathFree(targetSlot, initialSlot, idealCrane, containerToMove);
-            if( == null){
+            Crane blockingCrane = cranes.isPathFree(targetSlot, initialSlot, idealCrane, containerToMove);
+            if(blockingCrane == null){
                 moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove);
             }
             else{
-                Movement movement = new Movement(idealCrane,)
+                Movement movement = new Movement(idealCrane,blockingCrane, targetSlot, initialSlot);
+                movements.addMovement(movement);
+                moveWithIdealContainer(initialSlot, targetSlot, idealCrane, containerToMove);
             }
         }
         else{
