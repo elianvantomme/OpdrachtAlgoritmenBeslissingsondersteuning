@@ -3,8 +3,6 @@ package input;
 import container.Containers;
 import crane.Cranes;
 import grid.Grid;
-import grid.TargetYard;
-import grid.Yard;
 
 public class Instance {
     private Grid grid;
