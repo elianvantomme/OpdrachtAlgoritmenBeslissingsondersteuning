@@ -31,7 +31,8 @@ public class Slot {
     }
 
     public Container getTopContainer(){
-        return containerStack.peek();
+        if(!containerStack.isEmpty()) return containerStack.peek();
+        return null;
     }
 
     public Container popContainer(){

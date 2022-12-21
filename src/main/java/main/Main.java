@@ -11,6 +11,7 @@ import input.Instance;
 import org.json.simple.parser.ParseException;
 import grid.Grid;
 import slot.Slot;
+import visualisation.GridVisualizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,15 +115,18 @@ public class Main {
         Grid grid = instance.getGrid();
         Cranes cranes = instance.getCranes();
 
+        GridVisualizer gridVisualizer = new GridVisualizer(grid);
+        gridVisualizer.update();
+
         List<List<Container>> wrongContainers;
         while(!isFinished(containers)){
             wrongContainers = containers.getWrongContainers(grid);
             for(List<Container> stackWrongContainer : wrongContainers){
-//                System.out.println("press enter to continue");
-//                sc.nextLine();
+                System.out.println("press enter to continue");
+                sc.nextLine();
 //                System.out.println(grid);
                 moveContainer(containers, grid ,cranes, stackWrongContainer);
-//                grid.update(movements.getLastMovement());
+                gridVisualizer.update();
             }
         }
         System.out.println("final movements");

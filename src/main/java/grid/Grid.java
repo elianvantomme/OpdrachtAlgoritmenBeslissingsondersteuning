@@ -72,29 +72,20 @@ public class Grid {
     }
 
     public boolean checkTargetSlotViable(Container containerToMove, Slot targetSlot) {
-        //1 max height
         if (targetSlot.isMaxHeight(maxHeight)) {
-            System.out.println("slot is max height ==> targetSlot:" + targetSlot);
             return false;
         }
-        //2 stacking constraint
-        //2.1 is flat surface
         if (!isFlatSurface(containerToMove, targetSlot)) {
-            System.out.println("geen flat surface ==> container: " + containerToMove + " targetslot: " + targetSlot);
             return false;
         }
-        //2.2 voldoet aan stacking constraint
         if (!isStackable(containerToMove, targetSlot)) {
-            System.out.println("niet stackable ==> container: " + containerToMove + " targetslot: " + targetSlot);
             return false;
         }
-        System.out.println("stackable ==> container: " + containerToMove + " targetslot: " + targetSlot);
         return true;
     }
 
     public Slot findViableSlot(int[] interval, Container containerToMove, Crane pickupCrane, Crane dropOffCrane) {
         for(Slot slot : grid.values()){
-            //TODO is dit juist
             if(interval[0] <= slot.getX() && slot.getX() <= interval[1]){
                 if(!checkTargetSlotViable(containerToMove, slot)){
                     continue;
@@ -113,6 +104,22 @@ public class Grid {
 
     public double calcContainerPickupX(int containerLength, int slotX){
         return slotX + (double) containerLength/2;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public Map<Integer, Slot> getGrid() {
+        return grid;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
     }
 
     @Override
