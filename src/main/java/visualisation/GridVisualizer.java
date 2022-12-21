@@ -3,20 +3,23 @@ package visualisation;
 import grid.Grid;
 import slot.Slot;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class GridVisualizer extends JPanel {
     private static final int SLOT_SIZE = 50; // size of each slot in pixels
     private static final int PADDING = 10; // padding around the grid in pixels
 
     private Grid grid; // the grid to visualize
+    LegendPanel legendPanel;
 
     public GridVisualizer(Grid grid) {
         this.grid = grid;
+        this.legendPanel = new LegendPanel(grid);
+        legendPanel.setPreferredSize(new Dimension(200,400));
         createAndShowGUI();
     }
 
@@ -56,7 +59,6 @@ public class GridVisualizer extends JPanel {
     // returns a color for the given height, with lower heights being darker and higher heights being lighter
     private Color getHeatMapColor(int height) {
         float intensity = 1 - (float) height / grid.getMaxHeight();
-//        float intensity = (float) height * 10;
         return new Color(intensity, intensity, intensity);
     }
 
@@ -64,8 +66,11 @@ public class GridVisualizer extends JPanel {
     public void createAndShowGUI() {
         JFrame frame = new JFrame("Grid Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new GridLayout(2,1));
         frame.add(this);
+        frame.add(legendPanel);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
