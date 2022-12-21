@@ -94,7 +94,6 @@ public class Grid {
 
     public Slot findViableSlot(int[] interval, Container containerToMove, Crane pickupCrane, Crane dropOffCrane) {
         for(Slot slot : grid.values()){
-            //TODO is dit juist
             if(interval[0] <= slot.getX() && slot.getX() <= interval[1]){
                 if(!checkTargetSlotViable(containerToMove, slot)){
                     continue;
