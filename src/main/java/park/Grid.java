@@ -5,7 +5,6 @@ import crane.Crane;
 import crane.Movement;
 import slot.Slot;
 import util.Util;
-
 import java.util.*;
 
 public class Grid {

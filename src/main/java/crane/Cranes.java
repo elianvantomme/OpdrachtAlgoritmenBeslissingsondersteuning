@@ -5,7 +5,6 @@ import slot.Slot;
 import util.Util;
 
 import java.util.*;
-
 public class Cranes {
     private Map<Integer, Crane> craneMap;
     private int[] overlapInterval;
