@@ -21,7 +21,7 @@ public class GridVisualizer extends JPanel {
         this.grid = grid;
         this.maxHeight = grid.getMaxHeight();
         this.legendPanel = new LegendPanel(grid);
-        legendPanel.setPreferredSize(new Dimension(200,400));
+        legendPanel.setPreferredSize(new Dimension(100,200));
         createAndShowGUI();
     }
 
@@ -68,12 +68,34 @@ public class GridVisualizer extends JPanel {
     public void createAndShowGUI() {
         JFrame frame = new JFrame("Grid Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setLayout(new GridLayout(1,2));
-        this.setPreferredSize(new Dimension(1500,900));
-        frame.add(this);
-//        frame.add(legendPanel);
+
+// use GridBagLayout for the frame
+        frame.setLayout(new GridBagLayout());
+
+// create GridBagConstraints for the grid panel
+        GridBagConstraints gridConstraints = new GridBagConstraints();
+        gridConstraints.fill = GridBagConstraints.BOTH;
+        gridConstraints.weightx = 1.0;
+        gridConstraints.weighty = 1.0;
+        gridConstraints.gridx = 0;
+        gridConstraints.gridy = 0;
+
+// add the grid panel to the frame with the specified constraints
+        frame.add(this, gridConstraints);
+
+// create GridBagConstraints for the legend panel
+        GridBagConstraints legendConstraints = new GridBagConstraints();
+        legendConstraints.fill = GridBagConstraints.VERTICAL;
+        legendConstraints.weightx = 0.0;
+        legendConstraints.weighty = 1.0;
+        legendConstraints.gridx = 1;
+        legendConstraints.gridy = 0;
+
+// add the legend panel to the frame with the specified constraints
+        frame.add(legendPanel, legendConstraints);
+
+        frame.setPreferredSize(new Dimension(1500, 1000));
         frame.pack();
-//        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 

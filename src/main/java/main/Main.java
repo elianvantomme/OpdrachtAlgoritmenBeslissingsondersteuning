@@ -78,7 +78,6 @@ public class Main {
             Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
             movements.addContainerMovement(placeTempMovement,grid);
 
-            //TODO check of het pad vrij is
             Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
             movements.addEmptyMovement(emptyMovement);
 
@@ -86,11 +85,6 @@ public class Main {
             movements.addContainerMovement(pickTempMovement, grid);
             //move with ideal crane van
         }
-
-
-        /*
-        STAP 2: Move kraan naar de locatie
-         */
 
     }
 
@@ -104,6 +98,7 @@ public class Main {
         if(wrongContainers.size()==1){
             moveSingleWrongContainer(containerToMove, grid ,cranes);
         }else{
+            //TODO this is never necesary in the instances, so not implemented
 //            moveStackOfContainers(containers, grid ,cranes, wrongContainers);
 //            moveSingleWrongContainer(containerToMove, grid ,cranes, wrongContainers);
         }
