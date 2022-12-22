@@ -4,6 +4,7 @@ import container.Container;
 import container.Containers;
 import crane.Crane;
 import crane.Cranes;
+import input.AlgorithmType;
 import movement.Movement;
 import movement.Movements;
 import input.InputReader;
@@ -21,6 +22,7 @@ public class Main {
 
     static Scanner sc = new Scanner(System.in);
     static Movements movements = new Movements();
+    static AlgorithmType type;
 
     public static void moveWithIdealCrane(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
@@ -99,37 +101,52 @@ public class Main {
         return containers.isFinished();
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
-//        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
-//        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
-//        File initialYardFile = new File("src/main/instances/terminal22_1_100_1_10.json");
-//        File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
-//        File initialYardFile = new File("src/main/instances/6t/Terminal_10_10_3_1_100.json");
-//        File targetYardFile = new File("src/main/instances/6t/targetTerminal_10_10_3_1_100.json");
-        File initialYardFile = new File("src/main/instances/instances1/5t/TerminalB_20_10_3_2_160.json");
-        File targetYardFile = new File("src/main/instances/instances1/5t/targetTerminalB_20_10_3_2_160.json");
+    public static boolean isFinished(Grid grid){
+        return grid.isFinished();
+    }
 
-        InputReader inputReader = new InputReader(initialYardFile, targetYardFile);
+    public static void main(String[] args) throws IOException, ParseException {
+        InputReader inputReader = null;
+        File initialYardFile = new File(args[0]);
+        if(args.length == 1){
+             inputReader = new InputReader(initialYardFile);
+        }
+        if(args.length == 2){
+            File targetYardFile = new File(args[1]);
+             inputReader = new InputReader(initialYardFile, targetYardFile);
+        }
+
         Instance instance = inputReader.getInstance();
         Containers containers = instance.getContainers();
         Grid grid = instance.getGrid();
         Cranes cranes = instance.getCranes();
+        type = instance.getType();
+        System.out.println(type);
 
         GridVisualizer gridVisualizer = new GridVisualizer(grid);
-        gridVisualizer.update();
 
-        List<List<Container>> wrongContainers;
-        while(!isFinished(containers)){
-            wrongContainers = containers.getWrongContainers(grid);
-            for(List<Container> stackWrongContainer : wrongContainers){
-                System.out.println("press enter to continue");
-                sc.nextLine();
+        if(type == AlgorithmType.TRANSFORMTERMINAL){
+            List<List<Container>> wrongContainers;
+            while(!isFinished(containers)){
+                wrongContainers = containers.getWrongContainers(grid);
+                for(List<Container> stackWrongContainer : wrongContainers){
+                    System.out.println("press enter to continue");
+                    sc.nextLine();
 //                System.out.println(grid);
-                moveContainer(containers, grid ,cranes, stackWrongContainer);
-                gridVisualizer.update();
+                    moveContainer(containers, grid ,cranes, stackWrongContainer);
+                    gridVisualizer.update();
+                }
+            }
+            System.out.println("final movements");
+            movements.print();
+        }
+
+        if(type == AlgorithmType.TRANSFORMHEIGHT){
+            List<Container> wrongContainers;
+            while(!isFinished(grid)){
+
             }
         }
-        System.out.println("final movements");
-        movements.print();
+
     }
 }

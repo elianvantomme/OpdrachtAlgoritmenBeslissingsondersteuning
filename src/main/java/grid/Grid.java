@@ -2,6 +2,8 @@ package grid;
 
 import container.Container;
 import crane.Crane;
+import input.AlgorithmType;
+import input.InputReader;
 import movement.Movement;
 import slot.Slot;
 import util.Util;
@@ -11,14 +13,26 @@ import java.util.*;
 public class Grid {
     private Map<Integer, Slot> grid;
     private int maxHeight;
+    private int targetHeight;
     private int length;
     private int width;
+    private AlgorithmType type;
 
     public Grid(Map<Integer, Slot> grid, int maxHeight, int length, int width) {
         this.grid = grid;
         this.maxHeight = maxHeight;
         this.length = length;
         this.width = width;
+        type = AlgorithmType.TRANSFORMTERMINAL;
+    }
+
+    public Grid(Map<Integer, Slot> grid, int maxHeight, int targetHeight, int length, int width) {
+        this.grid = grid;
+        this.maxHeight = maxHeight;
+        this.targetHeight = targetHeight;
+        this.length = length;
+        this.width = width;
+        type = AlgorithmType.TRANSFORMHEIGHT;
     }
 
     public void putContainerOnSlot(Container container, int slotId) {

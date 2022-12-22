@@ -11,6 +11,7 @@ public class Container {
     public Container(int id, int length) {
         this.id = id;
         this.length = length;
+        this.targetSlotId = -1;
     }
 
     public void update(int slotId) {

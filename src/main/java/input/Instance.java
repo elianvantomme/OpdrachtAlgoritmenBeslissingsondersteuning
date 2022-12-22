@@ -8,11 +8,13 @@ public class Instance {
     private Grid grid;
     private Cranes cranes;
     private Containers containers;
+    private AlgorithmType type;
 
-    public Instance(Grid grid, Cranes cranes, Containers containers) {
+    public Instance(Grid grid, Cranes cranes, Containers containers, AlgorithmType type) {
         this.grid = grid;
         this.cranes = cranes;
         this.containers = containers;
+        this.type = type;
     }
 
     public Grid getGrid() {
@@ -25,6 +27,10 @@ public class Instance {
 
     public Containers getContainers() {
         return containers;
+    }
+
+    public AlgorithmType getType() {
+        return type;
     }
 
     @Override
