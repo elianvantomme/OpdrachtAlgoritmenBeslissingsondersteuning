@@ -2,7 +2,6 @@ package slot;
 
 import container.Container;
 
-import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class Slot {
@@ -18,8 +17,12 @@ public class Slot {
         containerStack = new Stack<>();
     }
 
-    public boolean isMaxHeight(int maxHeight) {
-        return containerStack.size() == maxHeight;
+    public boolean isAtHeight(int height) {
+        return containerStack.size() == height;
+    }
+
+    public boolean isHigherThan(int height){
+        return containerStack.size() >= height;
     }
 
     public int getHeight(){

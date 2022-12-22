@@ -14,10 +14,12 @@ public class GridVisualizer extends JPanel {
     private static final int PADDING = 10; // padding around the grid in pixels
 
     private Grid grid; // the grid to visualize
+    private int maxHeight;
     LegendPanel legendPanel;
 
     public GridVisualizer(Grid grid) {
         this.grid = grid;
+        this.maxHeight = grid.getMaxHeight();
         this.legendPanel = new LegendPanel(grid);
         legendPanel.setPreferredSize(new Dimension(200,400));
         createAndShowGUI();
@@ -58,7 +60,7 @@ public class GridVisualizer extends JPanel {
 
     // returns a color for the given height, with lower heights being darker and higher heights being lighter
     private Color getHeatMapColor(int height) {
-        float intensity = 1 - (float) height / grid.getMaxHeight();
+        float intensity = 1 - (float) height / maxHeight;
         return new Color(intensity, intensity, intensity);
     }
 

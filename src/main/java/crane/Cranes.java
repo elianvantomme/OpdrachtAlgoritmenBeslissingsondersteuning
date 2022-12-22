@@ -35,6 +35,17 @@ public class Cranes {
         return craneMap;
     }
 
+    public int[] findIdealCraneInterval(Slot currentSlot, Container container) {
+        double xPickup = Util.calcContainerPickupX(container.getLength(), currentSlot.getX());
+        System.out.println("xPickup = " + xPickup);
+        for(Crane crane : craneMap.values()){
+            if(crane.checkCraneCanPickUp(xPickup)){
+                return crane.getXinterval();
+            }
+        }
+        return new int[0];
+    }
+
     public List<Crane> findIdealCranes(Slot currentSlot, Slot targetSlot, Container container) {
         List<Crane> idealCranes = new ArrayList<>();
         for (Crane crane : craneMap.values()) {
@@ -75,6 +86,7 @@ public class Cranes {
         return null;
     }
 
+
     public int[] getOverlapInterval() {
         return overlapInterval;
     }
@@ -86,5 +98,6 @@ public class Cranes {
                 ", overlapInterval=" + Arrays.toString(overlapInterval) +
                 '}';
     }
+
 }
 

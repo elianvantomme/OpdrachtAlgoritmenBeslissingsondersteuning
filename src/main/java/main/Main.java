@@ -33,15 +33,21 @@ public class Main {
         /*
         STAP 0: kijken als target slot mogelijk is!
          */
-        if(!grid.checkTargetSlotViable(containerToMove, grid.getSlot(containerToMove.getTargetSlotId()))){
+        Slot initialSlot = grid.getSlot(containerToMove.getSlotId());
+        Slot targetSlot = null;
+        if(type == AlgorithmType.TRANSFORMTERMINAL){
+            targetSlot = grid.getSlot(containerToMove.getTargetSlotId());
+        }
+        if(type == AlgorithmType.TRANSFORMHEIGHT){
+            targetSlot = grid.findViableSlot(containerToMove, cranes);
+        }
+        if(!grid.checkTargetSlotViable(containerToMove, targetSlot)){
             return; // als je de container daar niet kan zetten
         }
 
         /*
         STAP 1: kijken voor usable kraan
          */
-        Slot initialSlot = grid.getSlot(containerToMove.getSlotId());
-        Slot targetSlot = grid.getSlot(containerToMove.getTargetSlotId());
 
         List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot,containerToMove);
         if(!idealCranes.isEmpty()){
@@ -61,15 +67,22 @@ public class Main {
             List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
             Crane pickupCrane = nonIdealCranes.get(0);
             Crane dropOffCrane = nonIdealCranes.get(1);
-            Slot viableSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
-            Movement placeTempMovement = new Movement(initialSlot, viableSlot,pickupCrane,containerToMove);
+            Slot tempSlot = null;
+            if(type == AlgorithmType.TRANSFORMTERMINAL){
+                tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
+            }
+            if(type == AlgorithmType.TRANSFORMHEIGHT){
+                // hier mag hij even geplaatst worden tot hoogte maxHeight
+                tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
+            }
+            Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
             movements.addContainerMovement(placeTempMovement,grid);
 
             //TODO check of het pad vrij is
-            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, viableSlot);
+            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
             movements.addEmptyMovement(emptyMovement);
 
-            Movement pickTempMovement = new Movement(viableSlot, targetSlot, dropOffCrane, containerToMove);
+            Movement pickTempMovement = new Movement(tempSlot, targetSlot, dropOffCrane, containerToMove);
             movements.addContainerMovement(pickTempMovement, grid);
             //move with ideal crane van
         }
@@ -142,11 +155,32 @@ public class Main {
         }
 
         if(type == AlgorithmType.TRANSFORMHEIGHT){
-            List<Container> wrongContainers;
+            /*
+            laag per laag verbouwen tot dat we bij target height zitten
+            vb van 3 --> 1:
+                1) alle containers op hoogte 3 verzetten
+                2) alle containers op hoogte 2 verzetten
+             */
+            List<List<Container>> wrongContainers;
             while(!isFinished(grid)){
-
+                System.out.println(grid);
+                wrongContainers = grid.getWrongContainers();
+                System.out.println("wrongContainers = " + wrongContainers);
+                for(List<Container> container : wrongContainers){
+                    System.out.println(container);
+                    System.out.println("press enter to continue");
+                    sc.nextLine();
+                    moveContainer(containers, grid, cranes, container);
+                    System.out.println(grid);
+                    gridVisualizer.update();
+                }
+                if(grid.getHeightTallestStack() == grid.getMaxHeight()-1){
+                    System.out.println("grid max height: " + grid.getMaxHeight());
+                    grid.updateMaxHeight();
+                    System.out.println("grid max height: " + grid.getMaxHeight());
+                }
             }
+            movements.print();
         }
-
     }
 }

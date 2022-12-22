@@ -12,9 +12,11 @@ public class LegendPanel extends JPanel {
     private static final int FONT_SIZE = 12; // font size for text labels
 
     private Grid grid; // the grid to visualize
+    private int maxHeight;
 
     public LegendPanel(Grid grid) {
         this.grid = grid;
+        this.maxHeight = grid.getMaxHeight();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class LegendPanel extends JPanel {
 
     // returns a color for the given height, with lower heights being darker and higher heights being lighter
     private Color getHeatMapColor(int height) {
-        float intensity = 1 - (float) height / grid.getMaxHeight();
+        float intensity = 1 - (float) height / maxHeight;
         return new Color(intensity, intensity, intensity);
     }
 }

@@ -53,6 +53,7 @@ public class Containers {
         return wrongContainers;
     }
 
+
     public boolean isFinished(){
         for(Container c : containerMap.values()){
             if(!c.isInCorrectSlot()) return false;

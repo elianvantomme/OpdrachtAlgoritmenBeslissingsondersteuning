@@ -2,8 +2,8 @@ package grid;
 
 import container.Container;
 import crane.Crane;
+import crane.Cranes;
 import input.AlgorithmType;
-import input.InputReader;
 import movement.Movement;
 import slot.Slot;
 import util.Util;
@@ -14,6 +14,7 @@ public class Grid {
     private Map<Integer, Slot> grid;
     private int maxHeight;
     private int targetHeight;
+    private int currentHeight;
     private int length;
     private int width;
     private AlgorithmType type;
@@ -30,9 +31,25 @@ public class Grid {
         this.grid = grid;
         this.maxHeight = maxHeight;
         this.targetHeight = targetHeight;
+        this.currentHeight = maxHeight;
         this.length = length;
         this.width = width;
         type = AlgorithmType.TRANSFORMHEIGHT;
+    }
+
+    public boolean isAtHeight(int height){
+        for(Slot s : grid.values()){
+            if(s.getHeight() > height) return false;
+        }
+        return true;
+    }
+
+    public int getHeightTallestStack(){
+        int currentHeight = 0;
+        for(Slot s : grid.values()){
+            if(s.getHeight() > currentHeight) currentHeight = s.getHeight();
+        }
+        return currentHeight;
     }
 
     public void putContainerOnSlot(Container container, int slotId) {
@@ -60,6 +77,7 @@ public class Grid {
         putContainerOnSlot(movedContainer, targetSlot.getId());
     }
 
+
     public boolean isFlatSurface(Container containerToMove, Slot targetSlot) {
         int height = targetSlot.getHeight();
         for (int i = targetSlot.getId() + 1; i < targetSlot.getId() + containerToMove.getLength(); i++) {
@@ -86,9 +104,13 @@ public class Grid {
     }
 
     public boolean checkTargetSlotViable(Container containerToMove, Slot targetSlot) {
-        if (targetSlot.isMaxHeight(maxHeight)) {
+        if(type == AlgorithmType.TRANSFORMTERMINAL && targetSlot.isAtHeight(maxHeight)){
             return false;
         }
+        if(type == AlgorithmType.TRANSFORMHEIGHT && targetSlot.isHigherThan(maxHeight-1)){
+            return false;
+        }
+
         if (!isFlatSurface(containerToMove, targetSlot)) {
             return false;
         }
@@ -116,6 +138,56 @@ public class Grid {
         return null;
     }
 
+    public Slot findViableSlot(Container containerToMove, Cranes cranes){
+        Slot viableSlot = null;
+        Slot currentSlot = getSlot(containerToMove.getSlotId());
+        int[] interval = cranes.findIdealCraneInterval(currentSlot, containerToMove);
+        if(interval.length != 0){
+            for(Slot slot : grid.values()){
+                double xPickup = Util.calcContainerPickupX(containerToMove.getLength(), slot.getX());
+                if(interval[0] <= xPickup && xPickup <= interval[1]){
+                    if(!checkTargetSlotViable(containerToMove, slot)){
+                        continue;
+                    }
+                    viableSlot = slot;
+                    break;
+                }
+            }
+        }
+        else {
+            for(Slot slot : grid.values()){
+                double xPickup = Util.calcContainerPickupX(containerToMove.getLength(), slot.getX());
+                if(0 <= xPickup && xPickup <= length-1){
+                    if(!checkTargetSlotViable(containerToMove, slot)){
+                        continue;
+                    }
+                    viableSlot = slot;
+                    break;
+                }
+            }
+        }
+        return viableSlot;
+    }
+
+    public boolean isFinished() {
+        for(Slot s : grid.values()){
+            if(s.getHeight() > targetHeight) return false;
+        }
+        return true;
+    }
+
+    public List<List<Container>> getWrongContainers() {
+        List<Integer> wrongContainerIds = new ArrayList<>();
+        List<List<Container>> wrongContainers = new ArrayList<>();
+        for(Slot s : grid.values()){
+            if(s.getHeight() == maxHeight && !wrongContainerIds.contains(s.getTopContainer().getId())){
+                wrongContainerIds.add(s.getTopContainer().getId());
+                wrongContainers.add(Arrays.asList(s.getTopContainer()));
+            }
+        }
+        return wrongContainers;
+    }
+
     public double calcContainerPickupX(int containerLength, int slotX){
         return slotX + (double) containerLength/2;
     }
@@ -134,6 +206,10 @@ public class Grid {
 
     public int getMaxHeight() {
         return maxHeight;
+    }
+
+    public void updateMaxHeight() {
+        this.currentHeight--;
     }
 
     @Override

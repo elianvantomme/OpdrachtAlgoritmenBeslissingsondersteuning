@@ -41,6 +41,9 @@ public class Crane {
         return xMin <= dropOffX && dropOffX <= xMax;
     }
 
+    public int[] getXinterval() {
+        return new int[]{xMin, xMax};
+    }
 
     public double getX() {
         return x;
@@ -99,4 +102,5 @@ public class Crane {
         return (idealCrane.getX() <= crane.getX() && crane.getX() <= targetSlot.getX())
                 || (targetSlot.getX() <= crane.getX() && crane.getX() <= idealCrane.getX());
     }
+
 }
