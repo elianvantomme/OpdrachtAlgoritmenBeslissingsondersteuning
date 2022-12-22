@@ -66,9 +66,9 @@ public class GridVisualizer extends JPanel {
     public void createAndShowGUI() {
         JFrame frame = new JFrame("Grid Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(2,1));
+//        frame.setLayout(new GridLayout(1,2));
         frame.add(this);
-        frame.add(legendPanel);
+//        frame.add(legendPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
