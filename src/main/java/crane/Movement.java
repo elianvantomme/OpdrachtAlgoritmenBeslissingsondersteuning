@@ -4,7 +4,7 @@ import container.Container;
 import slot.Slot;
 import util.Util;
 
-public class Movement {
+public class Movement implements Comparable<Movement>{
     /*
     x = xslot + lengte/2
     y = yslot + 1/2
@@ -53,6 +53,7 @@ public class Movement {
         this.yInitial = blockingCrane.getY();
         this.yTarget = blockingCrane.getY();
         this.startTime = crane.getLocalTime();
+        idealCrane.setLocalTime(crane.getLocalTime());
         this.containerId = -1;
         if (idealCrane.getX() < blockingCrane.getX()){
             this.xTarget = targetSlot.getX() + 2;
@@ -101,6 +102,10 @@ public class Movement {
         Movement.globalTime = globalTime;
     }
 
+    public double getStartTime() {
+        return startTime;
+    }
+
     @Override
     public String toString() {
         return crane.getId()+
@@ -111,5 +116,10 @@ public class Movement {
                 ","+yInitial+
                 ","+xTarget+
                 ","+yTarget;
+    }
+
+    @Override
+    public int compareTo(Movement o) {
+        return Double.compare(startTime, o.getStartTime());
     }
 }

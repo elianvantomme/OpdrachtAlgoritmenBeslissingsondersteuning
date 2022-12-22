@@ -68,6 +68,7 @@ public class Main {
             List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
             Crane pickupCrane = nonIdealCranes.get(0);
             Crane dropOffCrane = nonIdealCranes.get(1);
+
             Movement.setGlobalTime(Math.max(pickupCrane.getLocalTime(), dropOffCrane.getLocalTime()));
 
             Slot viableSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
@@ -195,7 +196,9 @@ public class Main {
                 iteratorBetween.remove();
             }
         }
+
         System.out.println("final movements");
         movements.print();
+        movements.printToFile(targetYardFile.getPath());
     }
 }

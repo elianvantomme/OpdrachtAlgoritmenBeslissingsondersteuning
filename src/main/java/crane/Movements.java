@@ -2,8 +2,9 @@ package crane;
 
 import park.Grid;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class Movements {
     private List<Movement> movementList;
@@ -28,8 +29,18 @@ public class Movements {
 
     public void print(){
         System.out.println("craneId,containerId,startTime,endTime,xPickup,yPickup,xDropOff,yDropOff");
+        Collections.sort(movementList);
         for(Movement m : movementList){
             System.out.println(m);
         }
+    }
+    public void printToFile(String path) throws IOException {
+        FileWriter fw = new FileWriter("output.csv");
+        Collections.sort(movementList);
+        fw.write("craneId,containerId,startTime,endTime,xPickup,yPickup,xDropOff,yDropOff \n");
+        for(Movement m : movementList){
+            fw.write(m.toString() + "\n");
+        }
+        fw.close();
     }
 }
