@@ -150,11 +150,11 @@ public class Main {
                 System.out.println(grid);
                 wrongContainers = grid.getWrongContainers();
                 for(List<Container> container : wrongContainers){
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     moveContainer(containers, grid, cranes, container);
                     gridVisualizer.update();
                 }
-                if(grid.getHeightTallestStack() == grid.getMaxHeight()-1){
+                if(grid.getHeightTallestStack() == grid.getCurrentHeight()-1){
                     grid.updateCurrentHeight();
                 }
             }

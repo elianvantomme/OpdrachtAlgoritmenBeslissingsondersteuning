@@ -223,6 +223,10 @@ public class Grid {
         return maxHeight;
     }
 
+    public int getCurrentHeight() {
+        return currentHeight;
+    }
+
     public void updateCurrentHeight() {
         this.currentHeight--;
     }
