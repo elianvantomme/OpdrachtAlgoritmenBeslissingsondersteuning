@@ -27,10 +27,6 @@ public class Main {
     }
 
     public static void moveInZone(Grid grid, Cranes cranes, Slot targetSlot, Slot initialSlot, Container containerToMove, Crane idealCrane) {
-        /*
-        TODO de tijd gaan synchroniseren wanner er een overlap is
-        De global tijd moet gelijk gesteld worden met de MAX(tijd van de kranen)
-         */
         Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
         if (blockingCrane == null){
             moveOfContainerWithCrane(initialSlot, targetSlot, idealCrane, containerToMove,grid);
@@ -121,8 +117,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-//        File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
-//        File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
+        // File initialYardFile = new File("src/main/instances/instances1/3t/TerminalA_20_10_3_2_160.json");
+        // File targetYardFile = new File("src/main/instances/instances1/3t/targetTerminalA_20_10_3_2_160.json");
 //        File initialYardFile = new File("src/main/instances/terminal22_1_100_1_10.json");
 //        File targetYardFile = new File("src/main/instances/terminal22_1_100_1_10target.json");
 //        File initialYardFile = new File("src/main/instances/6t/Terminal_10_10_3_1_100.json");

@@ -35,7 +35,7 @@ public class Movements {
         }
     }
     public void printToFile(String path) throws IOException {
-        FileWriter fw = new FileWriter("output.csv");
+        FileWriter fw = new FileWriter("output2.csv");
         Collections.sort(movementList);
         fw.write("craneId,containerId,startTime,endTime,xPickup,yPickup,xDropOff,yDropOff \n");
         for(Movement m : movementList){

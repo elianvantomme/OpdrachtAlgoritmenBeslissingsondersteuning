@@ -42,6 +42,7 @@ public class Movement implements Comparable<Movement>{
         this.container = container;
         this.containerId = container.getId();
         calculateTravelTimeOfMoveContainer();
+        globalTime = endTime;
         crane.updateCrane(xTarget, yTarget);
         crane.setLocalTime(endTime);
     }
@@ -52,19 +53,20 @@ public class Movement implements Comparable<Movement>{
         this.xInitial = blockingCrane.getX();
         this.yInitial = blockingCrane.getY();
         this.yTarget = blockingCrane.getY();
-        this.startTime = crane.getLocalTime();
-        idealCrane.setLocalTime(crane.getLocalTime());
+        this.startTime = globalTime;
         this.containerId = -1;
         if (idealCrane.getX() < blockingCrane.getX()){
-            this.xTarget = targetSlot.getX() + 2;
+            this.xTarget = blockingCrane.getX() + 2;
         }else if(idealCrane.getX() > blockingCrane.getX()){
-            this.xTarget = targetSlot.getX() - 2;
+            this.xTarget = blockingCrane.getX() - 2;
         }else{
             throw new IllegalArgumentException();
         }
         blockingCrane.updateCrane(xTarget, yTarget);
         calculateTravelTimeOfSafetyCrane();
         globalTime = endTime;
+        blockingCrane.setLocalTime(globalTime);
+        idealCrane.setLocalTime(globalTime);
     }
 
     private void calculateTravelTimeOfMoveContainer(){
