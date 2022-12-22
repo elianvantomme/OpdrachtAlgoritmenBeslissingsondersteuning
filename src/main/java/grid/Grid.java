@@ -103,14 +103,14 @@ public class Grid {
         return true;
     }
 
+
     public boolean checkTargetSlotViable(Container containerToMove, Slot targetSlot) {
         if(type == AlgorithmType.TRANSFORMTERMINAL && targetSlot.isAtHeight(maxHeight)){
             return false;
         }
-        if(type == AlgorithmType.TRANSFORMHEIGHT && targetSlot.isHigherThan(maxHeight-1)){
+        if(type == AlgorithmType.TRANSFORMHEIGHT && targetSlot.isHigherThan(currentHeight-1)){
             return false;
         }
-
         if (!isFlatSurface(containerToMove, targetSlot)) {
             return false;
         }
@@ -120,11 +120,32 @@ public class Grid {
         return true;
     }
 
+    public boolean checkTargetSlotViableOutZone(Container containerToMove, Slot targetSlot){
+        if(targetSlot.isHigherThan(maxHeight)){
+            return false;
+        }
+        if (!isFlatSurface(containerToMove, targetSlot)) {
+            return false;
+        }
+        if (!isStackable(containerToMove, targetSlot)) {
+            return false;
+        }
+        return true;
+    }
+
+
     public Slot findViableSlot(int[] interval, Container containerToMove, Crane pickupCrane, Crane dropOffCrane) {
         for(Slot slot : grid.values()){
             if(interval[0] <= slot.getX() && slot.getX() <= interval[1]){
-                if(!checkTargetSlotViable(containerToMove, slot)){
-                    continue;
+                if(type == AlgorithmType.TRANSFORMTERMINAL){
+                    if(!checkTargetSlotViable(containerToMove, slot)){
+                        continue;
+                    }
+                }
+                if(type == AlgorithmType.TRANSFORMHEIGHT){
+                    if(!checkTargetSlotViableOutZone(containerToMove, slot)){
+                        continue;
+                    }
                 }
                 if(!pickupCrane.checkCraneCanPickUp(Util.calcContainerPickupX(containerToMove.getLength(), slot.getX()))){
                     continue;
@@ -139,34 +160,28 @@ public class Grid {
     }
 
     public Slot findViableSlot(Container containerToMove, Cranes cranes){
-        Slot viableSlot = null;
         Slot currentSlot = getSlot(containerToMove.getSlotId());
-        int[] interval = cranes.findIdealCraneInterval(currentSlot, containerToMove);
-        if(interval.length != 0){
+        int[] interval = cranes.findPickupCraneInterval(currentSlot, containerToMove);
+        //first check to see if there is a target slot without crossing over shared zone
             for(Slot slot : grid.values()){
                 double xPickup = Util.calcContainerPickupX(containerToMove.getLength(), slot.getX());
                 if(interval[0] <= xPickup && xPickup <= interval[1]){
-                    if(!checkTargetSlotViable(containerToMove, slot)){
-                        continue;
+                    if(checkTargetSlotViable(containerToMove, slot)){
+                        return slot;
                     }
-                    viableSlot = slot;
-                    break;
                 }
             }
-        }
-        else {
+        // if it doesnt exist ==> search for slot across shared zone
             for(Slot slot : grid.values()){
                 double xPickup = Util.calcContainerPickupX(containerToMove.getLength(), slot.getX());
                 if(0 <= xPickup && xPickup <= length-1){
-                    if(!checkTargetSlotViable(containerToMove, slot)){
-                        continue;
+                    if(checkTargetSlotViable(containerToMove, slot)){
+                        return slot;
                     }
-                    viableSlot = slot;
-                    break;
                 }
             }
-        }
-        return viableSlot;
+
+        return null;
     }
 
     public boolean isFinished() {
@@ -208,7 +223,7 @@ public class Grid {
         return maxHeight;
     }
 
-    public void updateMaxHeight() {
+    public void updateCurrentHeight() {
         this.currentHeight--;
     }
 

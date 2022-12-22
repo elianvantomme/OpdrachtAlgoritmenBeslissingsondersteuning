@@ -35,7 +35,7 @@ public class Cranes {
         return craneMap;
     }
 
-    public int[] findIdealCraneInterval(Slot currentSlot, Container container) {
+    public int[] findPickupCraneInterval(Slot currentSlot, Container container) {
         double xPickup = Util.calcContainerPickupX(container.getLength(), currentSlot.getX());
         System.out.println("xPickup = " + xPickup);
         for(Crane crane : craneMap.values()){

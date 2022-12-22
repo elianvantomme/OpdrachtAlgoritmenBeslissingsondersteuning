@@ -118,7 +118,7 @@ public class Main {
         return grid.isFinished();
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         InputReader inputReader = null;
         File initialYardFile = new File(args[0]);
         if(args.length == 1){
@@ -134,7 +134,7 @@ public class Main {
         Grid grid = instance.getGrid();
         Cranes cranes = instance.getCranes();
         type = instance.getType();
-        System.out.println(type);
+        System.out.println("algorithm type = " + type);
 
         GridVisualizer gridVisualizer = new GridVisualizer(grid);
 
@@ -143,44 +143,29 @@ public class Main {
             while(!isFinished(containers)){
                 wrongContainers = containers.getWrongContainers(grid);
                 for(List<Container> stackWrongContainer : wrongContainers){
-                    System.out.println("press enter to continue");
-                    sc.nextLine();
-//                System.out.println(grid);
                     moveContainer(containers, grid ,cranes, stackWrongContainer);
                     gridVisualizer.update();
                 }
             }
-            System.out.println("final movements");
-            movements.print();
         }
 
         if(type == AlgorithmType.TRANSFORMHEIGHT){
-            /*
-            laag per laag verbouwen tot dat we bij target height zitten
-            vb van 3 --> 1:
-                1) alle containers op hoogte 3 verzetten
-                2) alle containers op hoogte 2 verzetten
-             */
             List<List<Container>> wrongContainers;
             while(!isFinished(grid)){
                 System.out.println(grid);
                 wrongContainers = grid.getWrongContainers();
-                System.out.println("wrongContainers = " + wrongContainers);
                 for(List<Container> container : wrongContainers){
-                    System.out.println(container);
-                    System.out.println("press enter to continue");
-                    sc.nextLine();
+                    Thread.sleep(1000);
                     moveContainer(containers, grid, cranes, container);
-                    System.out.println(grid);
                     gridVisualizer.update();
                 }
                 if(grid.getHeightTallestStack() == grid.getMaxHeight()-1){
-                    System.out.println("grid max height: " + grid.getMaxHeight());
-                    grid.updateMaxHeight();
-                    System.out.println("grid max height: " + grid.getMaxHeight());
+                    grid.updateCurrentHeight();
                 }
             }
-            movements.print();
         }
+
+        System.out.println("final movements");
+        movements.print();
     }
 }
