@@ -55,18 +55,12 @@ public class Main {
             tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
         }
         moveOfContainerWithCrane(initialSlot,tempSlot,pickupCrane,containerToMove,grid);
-//        Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
-//        movements.addContainerMovement(placeTempMovement,grid);
 
-            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
-            movements.addEmptyMovement(emptyMovement);
         //Empty movement
         Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
         movements.addEmptyMovement(emptyMovement);
 
         moveOfContainerWithCrane(tempSlot,targetSlot,dropOffCrane,containerToMove,grid);
-    }
-
     }
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
         /*
