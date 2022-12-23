@@ -24,9 +24,45 @@ public class Main {
     static Movements movements = new Movements();
     static AlgorithmType type;
 
-    public static void moveWithIdealCrane(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
+    public static void moveOfContainerWithCrane(Slot initialSlot, Slot targetSlot, Crane crane, Container containerToMove, Grid grid) {
         Movement movement = new Movement(initialSlot, targetSlot, crane, containerToMove);
         movements.addContainerMovement(movement, grid);
+    }
+
+    public static void moveInZone(Grid grid, Cranes cranes, Slot targetSlot, Slot initialSlot, Container containerToMove, Crane idealCrane) {
+        Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
+        if (blockingCrane == null){
+            moveOfContainerWithCrane(initialSlot, targetSlot, idealCrane, containerToMove,grid);
+        } else {
+            //EMPTY MOVEMENT
+            Movement movement = new Movement(idealCrane, blockingCrane, targetSlot);
+            movements.addEmptyMovement(movement);
+
+            moveOfContainerWithCrane(initialSlot, targetSlot, idealCrane, containerToMove,grid);
+        }
+    }
+
+    public static void moveOutZone(Grid grid, Cranes cranes, Slot targetSlot, Slot initialSlot, Container containerToMove){
+        List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
+        Crane pickupCrane = nonIdealCranes.get(0);
+        Crane dropOffCrane = nonIdealCranes.get(1);
+        Slot tempSlot = null;
+        if(type == AlgorithmType.TRANSFORMTERMINAL){
+            tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
+        }
+        if(type == AlgorithmType.TRANSFORMHEIGHT){
+            // hier mag hij even geplaatst worden tot hoogte maxHeight
+            tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
+        }
+        moveOfContainerWithCrane(initialSlot,tempSlot,pickupCrane,containerToMove,grid);
+//        Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
+//        movements.addContainerMovement(placeTempMovement,grid);
+
+        //Empty movement
+        Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
+        movements.addEmptyMovement(emptyMovement);
+
+        moveOfContainerWithCrane(tempSlot,targetSlot,dropOffCrane,containerToMove,grid);
     }
 
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
@@ -51,51 +87,11 @@ public class Main {
 
         List<Crane> idealCranes = cranes.findIdealCranes(initialSlot, targetSlot,containerToMove);
         if(!idealCranes.isEmpty()){
-            Crane idealCrane = idealCranes.get(0);
-            Crane blockingCrane = cranes.isPathFree(targetSlot, idealCrane);
-            if(blockingCrane == null){
-                moveWithIdealCrane(initialSlot, targetSlot, idealCrane, containerToMove, grid);
-            }
-            else{
-                Movement movement = new Movement(idealCrane,blockingCrane, targetSlot);
-                //EMPTY MOVEMENT
-                movements.addEmptyMovement(movement);
-                moveWithIdealCrane(initialSlot, targetSlot, idealCrane, containerToMove, grid);
-            }
+            moveInZone(grid, cranes, targetSlot, initialSlot, containerToMove, idealCranes.get(0));
         }
         else{
-            List<Crane> nonIdealCranes = cranes.getNonIdealCranes(initialSlot, targetSlot, containerToMove);
-            Crane pickupCrane = nonIdealCranes.get(0);
-            Crane dropOffCrane = nonIdealCranes.get(1);
-            Slot tempSlot = null;
-            if(type == AlgorithmType.TRANSFORMTERMINAL){
-                tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
-            }
-            if(type == AlgorithmType.TRANSFORMHEIGHT){
-                // hier mag hij even geplaatst worden tot hoogte maxHeight
-                tempSlot = grid.findViableSlot(cranes.getOverlapInterval(), containerToMove, pickupCrane, dropOffCrane);
-            }
-            Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
-            movements.addContainerMovement(placeTempMovement,grid);
-
-            //TODO check of het pad vrij is
-            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
-            movements.addEmptyMovement(emptyMovement);
-
-            Movement pickTempMovement = new Movement(tempSlot, targetSlot, dropOffCrane, containerToMove);
-            movements.addContainerMovement(pickTempMovement, grid);
-            //move with ideal crane van
+            moveOutZone(grid,cranes,targetSlot,initialSlot,containerToMove);
         }
-
-
-        /*
-        STAP 2: Move kraan naar de locatie
-         */
-
-    }
-
-    public static void moveStackOfContainers(Container containerToMove, Grid grid ,Cranes cranes, List<List<Container>> wrongContainers){
-
     }
 
     public static void moveContainer(Containers containers, Grid grid ,Cranes cranes, List<Container> wrongContainers){
