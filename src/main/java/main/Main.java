@@ -58,6 +58,8 @@ public class Main {
 //        Movement placeTempMovement = new Movement(initialSlot, tempSlot,pickupCrane,containerToMove);
 //        movements.addContainerMovement(placeTempMovement,grid);
 
+            Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
+            movements.addEmptyMovement(emptyMovement);
         //Empty movement
         Movement emptyMovement = new Movement(dropOffCrane, pickupCrane, tempSlot);
         movements.addEmptyMovement(emptyMovement);
@@ -65,6 +67,7 @@ public class Main {
         moveOfContainerWithCrane(tempSlot,targetSlot,dropOffCrane,containerToMove,grid);
     }
 
+    }
     public static void moveSingleWrongContainer(Container containerToMove, Grid grid ,Cranes cranes){
         /*
         STAP 0: kijken als target slot mogelijk is!
@@ -100,6 +103,7 @@ public class Main {
         if(wrongContainers.size()==1){
             moveSingleWrongContainer(containerToMove, grid ,cranes);
         }else{
+            //TODO this is never necesary in the instances, so not implemented
 //            moveStackOfContainers(containers, grid ,cranes, wrongContainers);
 //            moveSingleWrongContainer(containerToMove, grid ,cranes, wrongContainers);
         }
@@ -151,11 +155,11 @@ public class Main {
                 System.out.println(grid);
                 wrongContainers = grid.getWrongContainers();
                 for(List<Container> container : wrongContainers){
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     moveContainer(containers, grid, cranes, container);
                     gridVisualizer.update();
                 }
-                if(grid.getHeightTallestStack() == grid.getMaxHeight()-1){
+                if(grid.getHeightTallestStack() == grid.getCurrentHeight()-1){
                     grid.updateCurrentHeight();
                 }
             }
