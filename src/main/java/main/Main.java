@@ -138,6 +138,7 @@ public class Main {
                 wrongContainers = containers.getWrongContainers(grid);
                 for(List<Container> stackWrongContainer : wrongContainers){
                     moveContainer(containers, grid ,cranes, stackWrongContainer);
+                    Thread.sleep(500);
                     gridVisualizer.update();
                 }
             }
