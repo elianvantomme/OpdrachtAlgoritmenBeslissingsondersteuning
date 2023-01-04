@@ -99,8 +99,8 @@ public class Crane {
     }
 
     public boolean isInTheWay(Slot targetSlot, Crane idealCrane, Crane crane) {
-        return (idealCrane.getX() <= crane.getX() && crane.getX() <= targetSlot.getX())
-                || (targetSlot.getX() <= crane.getX() && crane.getX() <= idealCrane.getX());
+        return (idealCrane.getX() <= crane.getX()-2 && crane.getX()+2 <= targetSlot.getX())
+                || (targetSlot.getX() <= crane.getX()-2 && crane.getX()+2 <= idealCrane.getX());
     }
 
 }

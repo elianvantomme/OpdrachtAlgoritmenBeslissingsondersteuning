@@ -2,6 +2,8 @@ package movement;
 
 import grid.Grid;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,5 +33,14 @@ public class Movements {
         for(Movement m : movementList){
             System.out.println(m);
         }
+    }
+
+    public void printToFile(String outputFileString) throws IOException {
+        FileWriter fw = new FileWriter(outputFileString);
+        fw.write("craneId,containerId,startTime,endTime,xPickup,yPickup,xDropOff,yDropOff \n");
+        for (Movement m : movementList){
+            fw.write(m.toString() + "\n");
+        }
+        fw.close();
     }
 }

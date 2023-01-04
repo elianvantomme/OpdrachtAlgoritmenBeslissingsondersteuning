@@ -115,11 +115,14 @@ public class Main {
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         InputReader inputReader = null;
         File initialYardFile = new File(args[0]);
-        if(args.length == 1){
-             inputReader = new InputReader(initialYardFile);
-        }
+        String outputFile = "";
         if(args.length == 2){
+             inputReader = new InputReader(initialYardFile);
+             outputFile = args[1];
+        }
+        if(args.length == 3){
             File targetYardFile = new File(args[1]);
+            outputFile = args[2];
              inputReader = new InputReader(initialYardFile, targetYardFile);
         }
 
@@ -162,5 +165,6 @@ public class Main {
 
         System.out.println("final movements");
         movements.print();
+        movements.printToFile(outputFile);
     }
 }
